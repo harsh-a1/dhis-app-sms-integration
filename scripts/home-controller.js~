@@ -1,0 +1,66 @@
+/**
+ * Created by hisp on 1/12/15.
+ */
+
+skeletonApp
+    .controller('homeController', function ($rootScope,
+                                            $scope, $timeout,
+                                            MetadataService, utilityService) {
+
+        $scope.MOBILINK = "http://221.132.117.58:7700/receivesms_xml.php";
+        var XML = "<SMSRequest><Username>03028501480</Username><Password>cusit123</Password><Shortcode>7005056</Shortcode><FromDate>2016-04-16 10:00:00</FromDate><ToDate>2016-04-16 11:00:00</ToDate></SMSRequest>"
+
+//    MetadataService.getSMS($scope.MOBILINK,XML).then(function(data){
+//debugger
+//    })
+
+        var x2js = new X2JS();
+        jQuery.get('scripts/data.xml', function (data) {
+            var json = x2js.xml2json(data);
+
+            $timeout(function () {
+                $scope.jsonGrouped = utilityService.prepareMapGroupedById(json.SMSRsponse.SMSInfo, "smsFrom");
+                $scope.jsonGrouped = utilityService.prepareListFromMap($scope.jsonGrouped);
+            })
+
+            // parse sms
+            for (var i = 0; i < $scope.jsonGrouped.length; i++) {
+                var providerId = undefined;
+
+                for (var j = 0; j < $scope.jsonGrouped[i].length;) {
+                    var smsFrom = $scope.jsonGrouped[i][j].smsFrom;
+                    var smsMessage = $scope.jsonGrouped[i][j].smsMessage;
+                    Smsfrom = smsFrom.substr(1, smsFrom.length);
+
+                    if (parseMessage(smsMessage) == PROVIDERID) { //Forward to next state
+                        //get ID
+                        continue;
+                    }
+
+                    switch (parseMessage(smsMessage)) {
+                        case PROVIDERID : /* set providerId; let the loop run again*/
+                            break;
+                        case IPC :
+                            break
+                        case SALES :
+                            break
+                        case HSM :
+                            break
+                        case INVALID :
+                            break
+                        default :
+                            break
+
+                    }
+
+                    MetadataService.getTEIByAttribute(ROOT_OU_UID, PHONE_ATTR_UID, smsFrom).then(function (tei) {
+                        debugger
+                    })
+
+                }
+
+            }
+
+        })
+
+    });

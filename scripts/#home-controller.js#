@@ -19,31 +19,9 @@ skeletonApp
         var json = x2js.xml2json(data);
 
         $timeout(function(){
-            $scope.smsDataGroupedByPhone = utilityService.prepareMapGroupedById(json.SMSRsponse.SMSInfo,"smsFrom");
-            $scope.smsDataGroupedByPhone = utilityService.prepareListFromMap( $scope.jsonGrouped);
+            $scope.jsonGrouped = utilityService.prepareMapGroupedById(json.SMSRsponse.SMSInfo,"smsFrom");
+            $scope.jsonGrouped = utilityService.prepareListFromMap( $scope.jsonGrouped);
         })
-
-        function processSMS(smsData,index,providerId){
-            if (smsData.length == index){return}
-
-            MetadataService.getTEIByAttribute(ROOT_OU_UID,PHONE_ATTR_UID,smsFrom).then(function(tei){
-             if (tei.length>0){
-               for (var i=0;i<smsData[index].length;i++){
-                    var smsInfo = smsData[index][i];
-                    var parsed = messageParser(smsInfo);
-
-                   if (parsed.interpretation == PROVIDER_ID){
-                       providerId = parsed.output;
-                       continue;
-                   }
-
-
-                }
-             }else{console.log("No phone number found.")}
-
-            processSMS(smsData,index+1,providerId);
-            })
-        }
 
             // parse sms
             for (var i=0;i<$scope.jsonGrouped.length;i++){
@@ -59,7 +37,11 @@ skeletonApp
                         //get ID
 			continue;
 		    }
-                     
+                     /*
+		       Oye hello parseMessage - Tell me what operation to do on this SMS.
+		       smsParse - check the kind of message that has come. Return object and operation
+		       import - see which operation has to be performed 
+		      */
                     switch(pm){
                     case IPC : break
                     case SALES : break
@@ -69,7 +51,9 @@ skeletonApp
 
                     }
                     
-
+                    MetadataService.getTEIByAttribute(ROOT_OU_UID,PHONE_ATTR_UID,smsFrom).then(function(tei){
+                        debugger
+                    })
 
                 }
 

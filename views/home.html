@@ -1,8 +1,18 @@
 
 <div id="leftBar">
     <d2-left-bar></d2-left-bar>
-
 </div>
+
 <div id="mainPage">
     <h2>Skeleton App</h2>
+<table class="table-bordered dhis2-table-striped">
+    <tr>
+        <th>Phone</th>
+        <th colspan="10">Data</th>
+    </tr>
+    <tr ng-repeat="items in jsonGrouped">
+        <td>{{items[0].smsFrom}}</td><td ng-repeat="item in items" title="{{item.smsTo}}">{{item.smsMessage}} </td>
+    </tr>
+</table>
+
 </div>

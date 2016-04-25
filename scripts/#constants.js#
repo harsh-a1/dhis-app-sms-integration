@@ -1,0 +1,16 @@
+/**
+ * Created by harsh on 22/4/16.
+ */
+
+const PROVIDERID = "providerID";
+const ORIENTATION_MEETING = "OM";
+const NEIGBOURHOOD_MEETING = "NM"
+const PHONE_ATTR_UID = "SxSh9297ihW";
+const ROOT_OU_UID ="tZJsIdHAfKq";
+
+const UID_MAP = {
+ORIENTATION_MEETING : ""
+}
+
+
+
