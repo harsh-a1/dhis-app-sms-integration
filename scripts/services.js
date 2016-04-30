@@ -45,6 +45,20 @@ var skeletonAppServices = angular.module('skeletonAppServices', [])
                    }
                });
                return def;
+           },
+           getCurrentUser : function(){
+               var def = $.Deferred();
+               $.ajax({
+                   type: "GET",
+                   dataType: "json",
+                   contentType: "application/json",
+                   url: '../../me.json?fields=id,displayName',
+                   success: function (data) {
+
+                       def.resolve(data);
+                   }
+               });
+               return def;
            }
        }
     })
