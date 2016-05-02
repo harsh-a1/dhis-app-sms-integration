@@ -11,6 +11,9 @@ skeletonApp
     var XML = "<SMSRequest><Username>03028501480</Username><Password>cusit123</Password><Shortcode>7005056</Shortcode><FromDate>2016-04-16 10:00:00</FromDate><ToDate>2016-04-16 11:00:00</ToDate></SMSRequest>"
     var x2js = new X2JS();
 
+    $scope.importSummary = [{sms : "",
+                             result : "",
+                             response : ""   }]
 //    MetadataService.getSMS($scope.MOBILINK,XML).then(function(data){
 //debugger
 //    })
@@ -41,13 +44,24 @@ skeletonApp
 
                         for (var i=0;i<smsData[index].length;i++) {
                             var smsInfo = smsData[index][i];
+                            dependencies.smsDate = smsInfo.smsDate.split(" ")[0];
+
                             var parsed = messageParser(smsInfo,dependencies);
 
-                            if (parsed.interpretation == PROVIDER_ID){
-                                providerId = parsed.output;
-                                continue;
+                            if (parsed.subDomain == ONHOLD){
+                                dependencies.prevMessageTimestamp = smsInfo.smsDate;
+
+                                if (parsed.interpretation == PROVIDER_ID){
+                                    dependencies.providerID = parsed.output;
+                                    continue;
+                                }
+                                if (parsed.interpretation == MAWRAID){
+                                    dependencies.mawraID = parsed.output;
+                                    continue;
+                                }
                             }
-                            var imported = importer(parsed);
+
+                            var imported = importer(parsed,dependencies);
                         }
 
                     }else{console.log("No phone number found.")}

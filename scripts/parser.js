@@ -6,6 +6,7 @@ function messageParser(smsInfo,dependencies){
 
     var result = {
         domain : "",
+        subDomain : "",
         interpretation:"",
         operation : "" ,
         message: "" ,
@@ -19,13 +20,23 @@ function messageParser(smsInfo,dependencies){
         // is provider code
         result.interpretation = PROVIDER_ID;
         result.output = firstWord;
+        result.subDomain = ONHOLD;
         return result;
     }
 
     switch(firstWord){
-        case ORIENTATION_MEETING :
+        case BACK_CHECK :
+        case FOLLOW_UP_VISITS :
+        case HOUSEHOLD_VISITS :
+                                if (words.length == 2){
+                                    result.interpretation = MAWRAID;
+                                    result.output = words[1];
+                                    result.subDomain = ONHOLD;
+                                    return result;
+                                }
         case NEIGBOURHOOD_MEETING :
-        case 'AM' : return identifiedAs('IPC'); break;
+        case ORIENTATION_MEETING :
+        case AREA_MAPPING : return identifiedAs('IPC',firstWord); break;
     }
 
     function identifiedAs(domain){
@@ -37,7 +48,7 @@ function messageParser(smsInfo,dependencies){
                 trackedEntityInstance: dependencies.tei.trackedEntityInstance,
                 program : msgCategory.program,
                 orgUnit: dependencies.tei.orgUnit,
-                eventDate: new Date(),
+                eventDate: new Date(smsInfo.smsDate),
                 storedBy: dependencies.userName,
                 dataValues : []
             }
@@ -53,9 +64,23 @@ function messageParser(smsInfo,dependencies){
             }
 
             //Add timestamp and shortcode
-            event.dataValues.push({dataElement:msgCategory.DE_timestamp,value: new Date(smsInfo.smsDate)});
+          //  event.dataValues.push({dataElement:msgCategory.DE_timestamp,value: smsInfo.smsDate});
             event.dataValues.push({dataElement:msgCategory.DE_shortcode,value:smsInfo.smsTo});
 
+            if (firstWord == PROVIDER_ID) {
+                event.dataValues.push({dataElement: msgCategory.DE_providerCode, value: dependencies.providerID});
+                event.dataValues.push({
+                    dataElement: msgCategory.DE_providerTimestamp,
+                    value: dependencies.prevMessageTimestamp
+                });
+            }
+            if (firstWord == MAWRAID) {
+                event.dataValues.push({dataElement: msgCategory.DE_mawraID, value: dependencies.mawraID});
+                event.dataValues.push({
+                    dataElement: msgCategory.DE_startSMSTimestamp,
+                    value: dependencies.prevMessageTimestamp
+                });
+            }
             result.domain = domain;
             result.operation = ADD_UPDATE_EVENT;
             result.interpretation = firstWord;
@@ -65,7 +90,6 @@ function messageParser(smsInfo,dependencies){
         }
     }
 }
-
 
 function getWords(text,separatedBy){
     var words = [];

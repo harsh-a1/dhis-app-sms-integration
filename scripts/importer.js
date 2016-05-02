@@ -2,35 +2,54 @@
  * Created by harsh on 25/4/16.
  */
 
-function importer(data){
+function importer(parsed,dependencies){
 
-    switch(data.operation){
-        case ADD_UPDATE_EVENT : addUpdateEvent(data.output); break
+    switch(parsed.operation){
+        case ADD_UPDATE_EVENT : addUpdateEvent(parsed.output); break
     }
 
     function addUpdateEvent(event){
 
-        // get events which have the timestamp de eq to sms timestamp
-        // format attributes and their values then send to function
+        getEventIfExists(dependencies.tei.trackedEntityInstance,
+                         dependencies.smsDate,
+                         parsed.output.eventDate).then(function(eventUID){
+           if (eventUID){
+               updateEvent(event,eventUID).then(function(response){
 
-       var existingEvent = getEventIfExists();
-        if (!existingEvent){
-            //create one
-            debugger
-            createEvent(event).then(function (response){
-                //
-            })
-        }
+               })
+           }else{ //create a new one
+               createEvent(event).then(function (response){
+                   //
+               })
+           }
+       });
+
+
     }
 }
 
-function getEventIfExists(){
-    var event=undefined;
-
-    return event;
+function getEventIfExists(tei,startDate,timestamp){
+    var def = $.Deferred();
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        url: '../../events?paging=false&trackedEntityInstance='+tei+'&startDate='+startDate,
+        success: function (data) {
+            for (var i=0;i<data.events.length;i++){
+                var ed = new Date(data.events[i].eventDate)
+                if ( ed.getTime() == timestamp.getTime()){
+                    def.resolve(data.events[i].event);
+                }
+            }
+            def.resolve(undefined);
+        }
+    });
+    return def;
 }
 
 function createEvent(event){
+    debugger
     var def = $.Deferred();
     $.ajax({
         type: "POST",
@@ -40,6 +59,20 @@ function createEvent(event){
         data: JSON.stringify(event),
         success: function (data) {
 debugger
+        }
+    });
+    return def;
+}
+function updateEvent(event,id){
+    var def = $.Deferred();
+    $.ajax({
+        type: "PUT",
+        dataType: "json",
+        contentType: "application/json",
+        url: '../../events/'+id,
+        data: JSON.stringify(event),
+        success: function (data) {
+            debugger
         }
     });
     return def;
