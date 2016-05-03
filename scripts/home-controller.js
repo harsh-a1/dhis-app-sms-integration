@@ -11,9 +11,13 @@ skeletonApp
     var XML = "<SMSRequest><Username>03028501480</Username><Password>cusit123</Password><Shortcode>7005056</Shortcode><FromDate>2016-04-16 10:00:00</FromDate><ToDate>2016-04-16 11:00:00</ToDate></SMSRequest>"
     var x2js = new X2JS();
 
-    $scope.importSummary = [{sms : "",
-                             result : "",
-                             response : ""   }]
+    $scope.importSummary = [{tei : { phone : "",
+                                     messsages : [{ sms : "",
+                                         result : "",
+                                         response : ""   }],
+
+                                    }
+                            }]
 //    MetadataService.getSMS($scope.MOBILINK,XML).then(function(data){
 //debugger
 //    })
@@ -27,7 +31,6 @@ skeletonApp
                 $scope.smsDataGroupedByPhone = utilityService.prepareMapGroupedById(json.SMSRsponse.SMSInfo,"smsFrom");
                 $scope.smsDataGroupedByPhone = utilityService.prepareListFromMap( $scope.smsDataGroupedByPhone);
                 processSMS($scope.smsDataGroupedByPhone, 0,"");
-
             })
 
             function processSMS(smsData,index,providerId){
@@ -60,7 +63,6 @@ skeletonApp
                                     continue;
                                 }
                             }
-
                             var imported = importer(parsed,dependencies);
                         }
 

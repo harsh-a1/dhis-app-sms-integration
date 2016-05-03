@@ -31,7 +31,7 @@ function messageParser(smsInfo,dependencies){
                                 if (words.length == 2){
                                     result.interpretation = MAWRAID;
                                     result.output = words[1];
-                                    result.subDomain = ONHOLD;
+                                    result.subDomain = ONHOLD;debugger
                                     return result;
                                 }
         case NEIGBOURHOOD_MEETING :
@@ -64,28 +64,27 @@ function messageParser(smsInfo,dependencies){
             }
 
             //Add timestamp and shortcode
-          //  event.dataValues.push({dataElement:msgCategory.DE_timestamp,value: smsInfo.smsDate});
             event.dataValues.push({dataElement:msgCategory.DE_shortcode,value:smsInfo.smsTo});
+            event.dataValues.push({
+                dataElement: msgCategory.DE_previousMessageTimestamp,
+                value: new Date(dependencies.prevMessageTimestamp)
+            });
 
             if (firstWord == PROVIDER_ID) {
-                event.dataValues.push({dataElement: msgCategory.DE_providerCode, value: dependencies.providerID});
-                event.dataValues.push({
-                    dataElement: msgCategory.DE_providerTimestamp,
-                    value: dependencies.prevMessageTimestamp
-                });
+                event.dataValues.push({dataElement: msgCategory.DE_previousMessageField, value: dependencies.providerID});
+            }else  if (firstWord == MAWRAID) {
+                event.dataValues.push({dataElement: msgCategory.DE_previousMessageField, value: dependencies.mawraID});
+            }else{
+                event.dataValues.push({dataElement: msgCategory.DE_previousMessageField, value: dependencies.providerID});
+
             }
-            if (firstWord == MAWRAID) {
-                event.dataValues.push({dataElement: msgCategory.DE_mawraID, value: dependencies.mawraID});
-                event.dataValues.push({
-                    dataElement: msgCategory.DE_startSMSTimestamp,
-                    value: dependencies.prevMessageTimestamp
-                });
-            }
+
+
             result.domain = domain;
             result.operation = ADD_UPDATE_EVENT;
             result.interpretation = firstWord;
             result.output = event;
-
+            result.programStage = msgCategory.programStage;
             return result;
         }
     }

@@ -8,25 +8,13 @@
     <SMSInfo>
         <smsTo>7005056</smsTo>
         <smsFrom>+923002758716</smsFrom>
-        <smsMessage>OM 31</smsMessage>
-        <smsDate>2016-04-20 21:50:37</smsDate>
-    </SMSInfo>
-    <SMSInfo>
-        <smsTo>7005056</smsTo>
-        <smsFrom>+923002758716</smsFrom>
-        <smsMessage>OM 11</smsMessage>
-        <smsDate>2016-04-20 21:50:36</smsDate>
-    </SMSInfo>
-    <SMSInfo>
-        <smsTo>7005056</smsTo>
-        <smsFrom>+923000450984</smsFrom>
-        <smsMessage>Z04005960 ww.0</smsMessage>
+        <smsMessage>FV Z04005960</smsMessage>
         <smsDate>2016-04-20 21:18:43</smsDate>
     </SMSInfo>
     <SMSInfo>
         <smsTo>7005056</smsTo>
-        <smsFrom>+923000450984</smsFrom>
-        <smsMessage>N02000256 ww.0</smsMessage>
+        <smsFrom>+923002758716</smsFrom>
+        <smsMessage>FV abcdefg 12 23</smsMessage>
         <smsDate>2016-04-20 21:18:08</smsDate>
     </SMSInfo>
     <SMSInfo>

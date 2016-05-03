@@ -12,7 +12,7 @@ function importer(parsed,dependencies){
 
         getEventIfExists(dependencies.tei.trackedEntityInstance,
                          dependencies.smsDate,
-                         parsed.output.eventDate).then(function(eventUID){
+                         parsed.output.eventDate,parsed.programStage).then(function(eventUID){
            if (eventUID){
                updateEvent(event,eventUID).then(function(response){
 
@@ -28,13 +28,13 @@ function importer(parsed,dependencies){
     }
 }
 
-function getEventIfExists(tei,startDate,timestamp){
-    var def = $.Deferred();
+function getEventIfExists(tei,startDate,timestamp,programStage){
+    var def = $.Deferred();debugger
     $.ajax({
         type: "GET",
         dataType: "json",
         contentType: "application/json",
-        url: '../../events?paging=false&trackedEntityInstance='+tei+'&startDate='+startDate,
+        url: '../../events?paging=false&trackedEntityInstance='+tei+'&startDate='+startDate+"&programStage="+programStage,
         success: function (data) {
             for (var i=0;i<data.events.length;i++){
                 var ed = new Date(data.events[i].eventDate)
@@ -49,7 +49,6 @@ function getEventIfExists(tei,startDate,timestamp){
 }
 
 function createEvent(event){
-    debugger
     var def = $.Deferred();
     $.ajax({
         type: "POST",
@@ -72,7 +71,7 @@ function updateEvent(event,id){
         url: '../../events/'+id,
         data: JSON.stringify(event),
         success: function (data) {
-            debugger
+
         }
     });
     return def;
