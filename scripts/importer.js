@@ -5,34 +5,35 @@
 function importer(parsed,dependencies){
 
     switch(parsed.operation){
-        case ADD_UPDATE_EVENT : addUpdateEvent(parsed.output); break
+        case ADD_UPDATE_EVENT : return addUpdateEvent(parsed.output); break
     }
 
     function addUpdateEvent(event){
+        var def = $.Deferred();
 
         getEventIfExists(dependencies.tei.trackedEntityInstance,
                          dependencies.smsDate,
                          parsed.output.eventDate,parsed.programStage).then(function(eventUID){
            if (eventUID){
                updateEvent(event,eventUID).then(function(response){
-
+                    def.resolve(response);
                })
            }else{ //create a new one
                createEvent(event).then(function (response){
-                   //
+                   def.resolve(response);
                })
            }
        });
-
-
+        return def;
     }
 }
 
 function getEventIfExists(tei,startDate,timestamp,programStage){
-    var def = $.Deferred();debugger
+    var def = $.Deferred();
     $.ajax({
         type: "GET",
         dataType: "json",
+        async : false,
         contentType: "application/json",
         url: '../../events?paging=false&trackedEntityInstance='+tei+'&startDate='+startDate+"&programStage="+programStage,
         success: function (data) {
@@ -53,11 +54,12 @@ function createEvent(event){
     $.ajax({
         type: "POST",
         dataType: "json",
+        async : false,
         contentType: "application/json",
         url: '../../events',
         data: JSON.stringify(event),
         success: function (data) {
-debugger
+            def.resolve(data);
         }
     });
     return def;
@@ -67,11 +69,12 @@ function updateEvent(event,id){
     $.ajax({
         type: "PUT",
         dataType: "json",
+        async : false,
         contentType: "application/json",
         url: '../../events/'+id,
         data: JSON.stringify(event),
         success: function (data) {
-
+            def.resolve(data);
         }
     });
     return def;

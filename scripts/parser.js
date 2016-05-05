@@ -31,12 +31,13 @@ function messageParser(smsInfo,dependencies){
                                 if (words.length == 2){
                                     result.interpretation = MAWRAID;
                                     result.output = words[1];
-                                    result.subDomain = ONHOLD;debugger
+                                    result.subDomain = ONHOLD;
                                     return result;
                                 }
         case NEIGBOURHOOD_MEETING :
         case ORIENTATION_MEETING :
-        case AREA_MAPPING : return identifiedAs('IPC',firstWord); break;
+        case AREA_MAPPING : return identifiedAs('IPC'); break;
+        default : return identifiedAs('IPC',"INVALID");
     }
 
     function identifiedAs(domain){
@@ -70,13 +71,27 @@ function messageParser(smsInfo,dependencies){
                 value: new Date(dependencies.prevMessageTimestamp)
             });
 
-            if (firstWord == PROVIDER_ID) {
-                event.dataValues.push({dataElement: msgCategory.DE_previousMessageField, value: dependencies.providerID});
-            }else  if (firstWord == MAWRAID) {
-                event.dataValues.push({dataElement: msgCategory.DE_previousMessageField, value: dependencies.mawraID});
-            }else{
-                event.dataValues.push({dataElement: msgCategory.DE_previousMessageField, value: dependencies.providerID});
-
+            switch(firstWord){
+                case BACK_CHECK :
+                case FOLLOW_UP_VISITS :
+                case HOUSEHOLD_VISITS :
+                                        event.dataValues.push(
+                                            {dataElement: msgCategory.DE_previousMessageField, value: dependencies.mawraID});
+                                        break;
+                case NEIGBOURHOOD_MEETING :
+                case ORIENTATION_MEETING :
+                case AREA_MAPPING :
+                                        event.dataValues.push({dataElement: msgCategory.DE_previousMessageField, value: dependencies.providerID});
+                                        break;
+                case INVALID_FORMAT :          event.dataValues.push(
+                                            {dataElement: msgCategory.DE_smsMessage, value: smsInfo.smsMessage},
+                                            {dataElement: msgCategory.DE_shortcode, value: smsInfo.smsTo}
+                                        ); break;
+                default : event.dataValues.push(
+                    {dataElement: msgCategory.DE_smsMessage, value: smsInfo.smsMessage},
+                    {dataElement: msgCategory.DE_shortcode, value: smsInfo.smsTo}
+                );
+                             break;
             }
 
 

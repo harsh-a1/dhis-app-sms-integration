@@ -3,7 +3,7 @@ skeletonApp.controller('LeftBarMenuController',
         function($scope,
                 $location) {
     $scope.panel = function(){
-        $location.path('/panel').search();
+        $location.path('/').search();
     }; 
     
 

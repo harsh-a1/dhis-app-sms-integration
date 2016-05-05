@@ -2,10 +2,14 @@
  * Created by harsh on 22/4/16.
  */
 
-    // interpretations
+const DateToday = new Date();
+
+// interpretations
 const ONHOLD = "ONHOLD";
 const PROVIDER_ID = "providerID";
 const MAWRAID = "MawraId";
+const INVALID_FORMAT = "INVALID_FORMAT";
+const INVALID_PHONE = "INVALID_PHONE";
 
 // Sub Domains
 const ORIENTATION_MEETING = "OM";
@@ -20,6 +24,7 @@ const PHONE_ATTR_UID = "SxSh9297ihW";
 const ROOT_OU_UID ="tZJsIdHAfKq";
 const ADD_UPDATE_EVENT = "add_update_event";
 const PR_FFM_IPC = "TbYUPaBChYR";
+const PR_FFM_INVALID_MESSAGE = "";
 
 //Program Stages
 const PRST_ORIENTATION_MEETING = "OMHUToxZR03";
@@ -27,6 +32,7 @@ const PRST_NEIGBOURHOOD_MEETING = "mDwBhWDmLfr";
 const PRST_HOUSEHOLD_VISITS = "n2CFuvwUvnh";
 const PRST_AREA_MAPPING = "k7gHjJ4LFOU";
 const PRST_FOLLOWUP_VISITS = "hVVdocIy72g";
+const PRST_INVALID_MESSAGE = "";
 
 /* Common */
 const ProviderCode = "sBD5FEalBsU";
@@ -49,6 +55,10 @@ const HH_Clients_Registered = "nUqWTyxWCZs";
 /*Follow Up Visits*/
 const FV_clientsRegistered = "NoGwMfqdSOY";
 
+/* Inavlid */
+const INVALID_smsMessage = "";
+const INVALID_smsTo = "";
+
 // Create stage for all cases
 // Handle invalid messages
 // make import summary
@@ -58,6 +68,21 @@ const FV_clientsRegistered = "NoGwMfqdSOY";
 
 const FFM_METADATA_MAP = {
     IPC : {
+            INVALID_PHONE :{
+                pattern : {  },
+                program : PR_FFM_INVALID_MESSAGE,
+                DE_smsMessage : INVALID_smsMessage,
+                DE_shortcode : Shortcode,
+                DE_smsTo : INVALID_smsTo
+            },
+            INVALID_FORMAT : {
+                pattern : {  },
+                program : PR_FFM_IPC,
+                programStage : PRST_INVALID_MESSAGE,
+                DE_smsMessage : INVALID_smsMessage,
+                DE_shortcode : Shortcode,
+                DE_smsTo : INVALID_smsTo
+            },
             OM : {
                 pattern : { 1 :  "DE_numOfParticipants" },
                 program : PR_FFM_IPC,
@@ -114,7 +139,7 @@ const FFM_METADATA_MAP = {
                 DE_LastMawraId : LastMawraId,
                 DE_tokensIssued : Tokens_Issued,
                 DE_clientsRegistered :FV_clientsRegistered
-            },
+            }
         //    BC : {
         //        pattern : { 1 : "DE_staffCode",
         //                    2 : "DE_noOfBackChecks"

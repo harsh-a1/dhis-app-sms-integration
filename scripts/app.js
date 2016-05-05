@@ -12,7 +12,8 @@ var skeletonApp = angular.module('skeletonApp',['ui.bootstrap',
     'd2Filters',
     'd2Services',
     'pascalprecht.translate',
-    'skeletonAppServices'
+    'skeletonAppServices',
+    'jsonFormatter'
 ])
 
 .config(function($routeProvider,$translateProvider){
