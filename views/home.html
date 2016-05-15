@@ -9,28 +9,32 @@
         <label>Choose Dates Between </label>
         <input type="date" ng-model="startDate" max="{{dateToday}}"> <b>AND</b>
         <input type="date" ng-model="endDate" max="{{dateToday}}">
-        <input type="button" value="Import" ng-click="importSMS()">
+        <input type="button" value="Import" ng-click="init()">
     </div>
     <br><br>
-    <table class="table-bordered" >
+    <table class="table-bordered reportTable" >
         <tr>
             <th>#</th>
             <th>Phone</th>
             <th>Message</th>
-            <th>Import Status</th>
             <th>smsDate</th>
-            <th>Import Details</th>
-            <th>SMS Details</th>
+            <th>Message Identity</th>
+            <th>Import Type</th>
+            <th>Import Status</th>
+            <th>Reference</th>
+            <th>Conflicts</th>
         </tr>
-        <tbody ng-repeat="item in importSummary">
-        <tr><td rowspan="{{item.sms.length+1}}" >{{$index+1}}</td><td rowspan="{{item.sms.length+1}}" class="align-center">{{item.phone}}</td></tr>
-        <tr ng-repeat="sms in item.sms">
+        <tbody ng-repeat="row in report">
+        <tr><td rowspan="{{row.sms.length+1}}" >{{$index+1}}</td><td rowspan="{{row.sms.length+1}}" class="align-center">{{row.phone}}</td></tr>
+        <tr ng-repeat="sms in row.sms">
 
-            <td class="align-center">{{sms.smsDetails.smsMessage}}</td>
-            <td class="align-center">{{sms.importStatus}}</td>
-            <td class="align-center">{{sms.smsDetails.smsDate}}</td>
-            <td><json-formatter json="sms.importDetails" open="0"></td>
-            <td><json-formatter json="sms.smsDetails" open="0"></td>
+            <td class="align-center">{{sms.smsMessage}}</td>
+            <td class="align-center">{{sms.smsDate}}</td>
+            <td class="align-center">{{sms.messageType}}</td>
+            <td class="align-center">{{sms.importType}}</td>
+            <td class="align-center">{{sms.status}}</td>
+            <td class="align-center">{{sms.reference}}</td>
+            <td><json-formatter json="sms.conflicts" open="0"></td>
         </tr>
         </tbody>
     </table>

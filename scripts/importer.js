@@ -6,8 +6,26 @@ function importer(parsed,dependencies){
 
     switch(parsed.operation){
         case ADD_UPDATE_EVENT : return addUpdateEvent(parsed.output); break
+        case ADD_UPDATE_EVENT_INVALID_PHONE : return addUpdateInvalidEvent(parsed.output); break
     }
 
+    function addUpdateInvalidEvent(event){
+        var def = $.Deferred();
+debugger
+        getEventIfExists_INVALID( dependencies.smsDate,
+            parsed.output.eventDate,dependencies.program).then(function(eventUID){
+            if (eventUID){
+                updateEvent(event,eventUID).then(function(response){
+                    def.resolve(response);
+                })
+            }else{ //create a new one
+                createEvent(event).then(function (response){
+                    def.resolve(response);
+                })
+            }
+        });
+        return def;
+    }
     function addUpdateEvent(event){
         var def = $.Deferred();
 
@@ -49,6 +67,27 @@ function getEventIfExists(tei,startDate,timestamp,programStage){
     return def;
 }
 
+
+function getEventIfExists_INVALID(startDate,timestamp,programStage){
+    var def = $.Deferred();
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        async : false,
+        contentType: "application/json",
+        url: '../../events?paging=false&startDate='+startDate+"&program="+programStage,
+        success: function (data) {
+            for (var i=0;i<data.events.length;i++){
+                var ed = new Date(data.events[i].eventDate)
+                if ( ed.getTime() == timestamp.getTime()){
+                    def.resolve(data.events[i].event);
+                }
+            }
+            def.resolve(undefined);
+        }
+    });
+    return def;
+}
 function createEvent(event){
     var def = $.Deferred();
     $.ajax({
