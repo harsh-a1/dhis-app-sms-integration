@@ -2,17 +2,20 @@
  * Created by harsh on 14/5/16.
  */
 
-function importHandler(state,sms,callback,skipInvalid){
+function importHandler(state,sms,callback){
 
     switch(state.currentState){
-        case INVALID_PHONE : if (skipInvalid){
+        case INVALID_PHONE : if (isForSkipping()){
                                 skipSMS(); break
                                 }
                             prepareInvalidEvent();break
-        case ACTION_IMPORT : prepareEvent();break
-        case INVALID_FORMAT : if (skipInvalid){
-                                skipSMS(); break
-                                 }
+        case ACTION_IMPORT : if (isForSkipping()){
+                           skipSMS(); break
+                            }
+                            prepareEvent();break
+        case INVALID_FORMAT : if (isForSkipping()){
+                                    skipSMS(); break
+                                    }
                             prepareInvalidFormatEvent(); break
     }
 
@@ -123,5 +126,12 @@ function importHandler(state,sms,callback,skipInvalid){
         response.messageType = state.messageType;
         response.importType = SKIP;
     callback(response);
+    }
+
+    function isForSkipping(){
+        if (state.skipCriteria[state.domain]){
+            return true;
+        }
+        return false;
     }
 }

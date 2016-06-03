@@ -8,7 +8,8 @@ StateMachine = function(){
     this.tei = "";
     this.messageType = "";
     this.providerData = {}
-    this.mawraData = {}
+    this.mawraData = {};
+    this.domain = "";
 
 }
 
@@ -19,4 +20,8 @@ StateMachine.prototype.valid = function(){
 StateMachine.prototype.changeState = function(state){
     this.currentState = state;
     this.messageType = state;
+
+    if (state == INVALID_PHONE){
+        this.domain = DOMAIN_INVALID;
+    }
 }

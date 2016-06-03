@@ -11,6 +11,10 @@ skeletonApp
 
     $scope.MOBILINK = "http://221.132.117.58:7700/receivesms_xml.php";
     $scope.skipInvalid = true;
+    $scope.skipIPC = false;
+    $scope.skipSales = true;
+    $scope.skipHS = true;
+
     $scope.loading = false;
     var x2js = new X2JS();
     $timeout(function(){
@@ -73,6 +77,14 @@ skeletonApp
         $scope.loading = true;
 
         state = new StateMachine();
+
+        state.skipCriteria ={};
+        state.skipCriteria[DOMAIN_IPC] = $scope.skipIPC;
+        state.skipCriteria[DOMAIN_SALES] = $scope.skipSales;
+        state.skipCriteria[DOMAIN_HS] = $scope.skipHS;
+        state.skipCriteria[DOMAIN_INVALID] = $scope.skipInvalid;
+
+
         importSummary = new Summary();
 
         var XML = "<SMSRequest><Username>03028501480</Username>" +
@@ -108,7 +120,7 @@ skeletonApp
                             importSummary.addOnHoldResponse(sms,state);
                             continue;
                         }
-                    importHandler(state,sms,callback,$scope.skipInvalid);
+                    importHandler(state,sms,callback);
                 }
             }else{
                 state.changeState(INVALID_PHONE);
@@ -116,7 +128,7 @@ skeletonApp
                     var sms = smsList[i];
 
                     importSummary.addSMSDetails(phone,sms);
-                    importHandler(state,sms,callback,$scope.skipInvalid);
+                    importHandler(state,sms,callback);
                 }
             }
             setTimeout(function(){

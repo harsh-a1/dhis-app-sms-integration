@@ -12,7 +12,10 @@ const SKIP = "SKIP";
 //STates
 const START_STATE = "START_STATE";
 const INVALID_PHONE = "INVALID_PHONE";
-
+const DOMAIN_IPC = "DOMAIN_IPC";
+const DOMAIN_SALES= "DOMAIN_SALES";
+const DOMAIN_HS = "DOMAIN_HS";
+const DOMAIN_INVALID = "DOMAIN_INVALID";
 
 // interpretations
 const ONHOLD = "START_MSG";

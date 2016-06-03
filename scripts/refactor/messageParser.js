@@ -15,7 +15,7 @@ function messageParser(state,msg,smsTo){
         state.providerData.timestamp = smsTo;
         return
     }
-
+debugger
     switch(firstWord){
         case BACK_CHECK :
         case FOLLOW_UP_VISITS :
@@ -33,9 +33,11 @@ function messageParser(state,msg,smsTo){
                 state.changeState(ACTION_IMPORT);
                 state.firstWord = firstWord;
                 state.words = words;
+                state.domain = DOMAIN_IPC;
                 return
         default :
                 state.changeState(INVALID_FORMAT);
+                state.domain = DOMAIN_INVALID;
                 return
     }
 }
