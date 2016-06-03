@@ -11,6 +11,7 @@ skeletonApp
 
     $scope.MOBILINK = "http://221.132.117.58:7700/receivesms_xml.php";
     $scope.skipInvalid = true;
+    $scope.loading = false;
     var x2js = new X2JS();
     $timeout(function(){
         $scope.startDate = DateToday;
@@ -33,7 +34,7 @@ skeletonApp
                 xmlStr = xmlStr+data[i];
             }
 
-            xmlStr = cleanXML(xmlStr)
+            xmlStr = cleanXML(xmlStr);
 
             var xml = $.parseXML("<root>"+xmlStr+"</root>");
             var jsonData = x2js.xml2json(xml);
@@ -49,11 +50,16 @@ skeletonApp
             if (json.SMSRsponse){
                 if(json.SMSRsponse.Error)
                     alert(json.SMSRsponse.Error);
+
+                stopLoader();
                 return
             }
              $scope.smsDataGroupedByPhone = utilityService.prepareMapGroupedById(json.SMSInfo,"smsFrom");
-             $scope.smsDataGroupedByPhone = utilityService.prepareListFromMap( $scope.smsDataGroupedByPhone);
-             def.resolve($scope.smsDataGroupedByPhone);
+             $scope.smsDataGroupedByPhone = utilityService.sort($scope.smsDataGroupedByPhone);
+
+            $scope.smsDataGroupedByPhone = utilityService.prepareListFromMap( $scope.smsDataGroupedByPhone);
+
+            def.resolve($scope.smsDataGroupedByPhone);
         })
     return def;
     }
@@ -63,6 +69,8 @@ skeletonApp
             alert("Please select both start and end date");
             return
         }
+
+        $scope.loading = true;
 
         state = new StateMachine();
         importSummary = new Summary();
@@ -79,7 +87,10 @@ skeletonApp
 
     function processData(smsData,index){
         if (smsData.length == index)
-        {return}
+        {
+            stopLoader();
+            return
+        }
 
         var smsList= smsData[index];
         var phone = smsList[0].smsFrom;
@@ -100,7 +111,7 @@ skeletonApp
                     importHandler(state,sms,callback,$scope.skipInvalid);
                 }
             }else{
-            state.changeState(INVALID_PHONE);
+                state.changeState(INVALID_PHONE);
                 for (var i=0;i<smsList.length;i++){
                     var sms = smsList[i];
 
@@ -120,5 +131,11 @@ skeletonApp
             })
         }
 
+    }
+
+    function stopLoader(){
+        $timeout(function(){
+            $scope.loading = false;
+        })
     }
     });

@@ -130,11 +130,23 @@ debugger
             return map;
         },
         prepareListFromMap: function(map){
-            var list = [];
-            for (var key in map){
-                list.push(map[key]);
+          return prepareListFromMap(map);
+        },
+        sort : function(data){
+            for (var key in data){
+                data[key].sort(function(a,b){
+                    var aDate = new Date(a.smsDate);
+                    var bDate = new Date(b.smsDate);
+                    if ( aDate == bDate){
+                        return 0
+                    }else if (aDate > bDate)
+                    { return 1
+                    }else if (aDate < bDate){
+                        return -1;
+                    }
+                })
             }
-            return list;
+            return data;
         }
     }
 })

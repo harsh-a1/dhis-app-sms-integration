@@ -4,10 +4,11 @@
 </div>
 -->
 <div id="mainPage">
-    <h3 >Import SMS messages from Mobilink</h3><br>
+    <h3 >Import SMS messages from Mobilink <img ng-show="loading" height="22" src="resources/images/loader-circle.GIF"></h3>
+    <br>
     <div>
 
-        <input type="checkbox" ng-model="skipInvalid">Skip Invalid SMS?<br>
+        <input type="checkbox" ng-model="skipInvalid">Check to Skip Invalid SMS<br>
 
         <label>Choose Dates Between </label>
 
@@ -16,7 +17,7 @@
         <input type="button" class="btn btn-success" value="Import" ng-click="init()">
     </div>
     <br><br>
-    <table class="responstable" >
+    <table class="table-bordered reportTable" >
         <tr>
             <th>#</th>
             <th>Phone</th>

@@ -24,9 +24,15 @@ prepareMapGroupedById= function(object,id){
 
 prepareListFromMap= function(map){
     var list = [];
+    var keys = [];
     for (var key in map){
-        list.push(map[key]);
+        keys.push(key);
     }
+    keys.sort();
+    for (var key in keys){
+        list.push(map[keys[key]]);
+    }
+
     return list;
 }
 
