@@ -2,12 +2,18 @@
  * Created by harsh on 14/5/16.
  */
 
-function importHandler(state,sms,callback){
+function importHandler(state,sms,callback,skipInvalid){
 
     switch(state.currentState){
-        case INVALID_PHONE : prepareInvalidEvent();break
+        case INVALID_PHONE : if (skipInvalid){
+                                skipSMS(); break
+                                }
+                            prepareInvalidEvent();break
         case ACTION_IMPORT : prepareEvent();break
-        case INVALID_FORMAT : prepareInvalidFormatEvent(); break
+        case INVALID_FORMAT : if (skipInvalid){
+                                skipSMS(); break
+                                 }
+                            prepareInvalidFormatEvent(); break
     }
 
     function prepareInvalidEvent(){
@@ -34,7 +40,6 @@ function importHandler(state,sms,callback){
                 event.POST(state.messageType,sms.smsDate,callback);
             }
         })
-
     }
 
     function prepareEvent(){
@@ -110,5 +115,13 @@ function importHandler(state,sms,callback){
                 event.POST(state.messageType,sms.smsDate,callback);
             }
         })
+    }
+
+    function skipSMS(){
+        var response = [];
+        response.smsDate = sms.smsDate;
+        response.messageType = state.messageType;
+        response.importType = SKIP;
+    callback(response);
     }
 }

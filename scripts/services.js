@@ -18,19 +18,24 @@ var skeletonAppServices = angular.module('skeletonAppServices', [])
                });
                return def;
            },
-           getSMS : function(url,data){
+           getSMS : function(data){
                var def = $.Deferred();
                $.ajax({
-                   type: "POST",
-                   dataType: "xml",
+                   type: "GET",
+                   dataType: "jsonp",
                    crossDomain: true,
-                   contentType: "application/xml",
-                   data : data,
-                   url: url,
+                   data : "xmldoc="+data,
+                   jsonpCallback: 'response',
+                   url: "http://221.132.117.58:7700/receivesms_xml_json.php",
                    success: function (data) {
                        def.resolve(data);
                    }
                });
+               function response (data) {
+                   //alert(data);
+
+                   console.log(data);
+               }
                return def;
            },
            getTEIByAttribute : function(rootOU,attr,value){
@@ -56,6 +61,27 @@ var skeletonAppServices = angular.module('skeletonAppServices', [])
                    success: function (data) {
 
                        def.resolve(data);
+                   }
+               });
+               return def;
+           },
+           testJsonp : function(){
+               debugger
+               var def = $.Deferred();
+               $.ajax({
+                   type: "GET",
+                   contentType: "application/json",
+                   crossDomain: true,
+                   dataType:"json",
+                   headers: {
+                       "Authorization": "Basic " + btoa("admin" + ":" + "district")
+                   },
+                   url: 'https://play.dhis2.org/demo/api/me.json?fields=id,displayName',
+                   success: function (data) {
+debugger
+                       def.resolve(data);
+                   },error:function(response){
+                       debugger
                    }
                });
                return def;

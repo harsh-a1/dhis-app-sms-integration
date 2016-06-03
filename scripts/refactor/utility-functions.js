@@ -44,11 +44,14 @@ function findConflicts(response){
             return ([{object:jsonRT.response.importSummaries[0].description,value:""}]);
         }
     }else{
-        if (response.httpStatus.response){
-            if (response.httpStatus.response.conflicts){
-                return response.httpStatus.response.conflicts;
+        if (response.httpStatus){
+            if (response.httpStatus.response){
+                if (response.httpStatus.response.conflicts){
+                    return response.httpStatus.response.conflicts;
+                }
             }
         }
+
     }
 
     return NOT_APPLICABLE;
@@ -74,6 +77,79 @@ return NOT_APPLICABLE;
 }
 
 function findStatus(response){
-debugger
+
     return response.status;
 }
+
+function cleanXML(data,property){
+
+    function replaceInvalidChar(index,value){
+        data = data.substring(0,occurencesStartTag[i]+startTag.length+index)+value+data.substring(occurencesStartTag[i]+startTag.length+index+1,data.length)
+    }
+
+    var startTag = "<smsMessage>";
+    var endTag = "</smsMessage>";
+
+    var occurencesStartTag = getIndicesOf(startTag,data,true);
+    var occurencesEndTag = getIndicesOf(endTag,data,true);
+
+    for (var i=0;i<occurencesStartTag.length;i++){
+        var msg = data.substring(occurencesStartTag[i]+startTag.length,occurencesEndTag[i]);
+
+        var index1 = getIndicesOf(">",msg,true);
+        var index2 = getIndicesOf("<",msg,true);
+        var index3 = getIndicesOf("&",msg,true);
+        var index4 = getIndicesOf("\"",msg,true);
+        var index5 = getIndicesOf("'",msg,true);
+
+        if ( index1.length != 0){
+            for (var key in index1){
+                replaceInvalidChar(index1[key],".");
+            }
+        }
+        if ( index2.length != 0){
+            for (var key in index2){
+                replaceInvalidChar(index2[key],".");
+            }
+        }
+        if ( index3.length != 0){
+            for (var key in index3){
+                replaceInvalidChar(index3[key],".");
+            }
+        }
+        if ( index4.length != 0){
+            for (var key in index4){
+                replaceInvalidChar(index4[key],".");
+            }
+        }
+        if ( index5.length != 0){
+            for (var key in index5){
+                replaceInvalidChar(index5[key],".");
+            }
+        }
+
+    }
+    data = data.replaceAll('\0','');
+
+    return data;
+}
+
+function getIndicesOf(searchStr, str, caseSensitive) {
+    //http://stackoverflow.com/a/3410557/4989935
+    var startIndex = 0, searchStrLen = searchStr.length;
+    var index, indices = [];
+    if (!caseSensitive) {
+        str = str.toLowerCase();
+        searchStr = searchStr.toLowerCase();
+    }
+    while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+        indices.push(index);
+        startIndex = index + searchStrLen;
+    }
+    return indices;
+}
+
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};

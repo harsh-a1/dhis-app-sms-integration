@@ -7,7 +7,6 @@ function getEventIfExists_INVALID_PHONE(startDate,timestamp,program){
     $.ajax({
         type: "GET",
         dataType: "json",
-        async : false,
         contentType: "application/json",
         url: '../../events?skipPaging=true&eventDate='+startDate+"&program="+program,
         success: function (data) {
@@ -28,7 +27,6 @@ function getEventIfExists(startDate,timestamp,programStage,tei){
     $.ajax({
         type: "GET",
         dataType: "json",
-        async : false,
         contentType: "application/json",
         url: '../../events?skipPaging=true&eventDate='+startDate+"&programStage="+programStage+"&trackedEntityInstance="+tei,
         success: function (data) {

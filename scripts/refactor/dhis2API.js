@@ -23,7 +23,6 @@ dhis2API.event.prototype.POST = function(msgType,smsDate,callback){
     $.ajax({
         type: "POST",
         dataType: "json",
-        async : false,
         contentType: "application/json",
         url: '../../events',
         data: JSON.stringify(event),
@@ -53,7 +52,6 @@ dhis2API.event.prototype.PUT = function(msgType,smsDate,callback,eventUID){
     $.ajax({
         type: "PUT",
         dataType: "json",
-        async : false,
         contentType: "application/json",
         url: '../../events/'+eventUID,
         data: JSON.stringify(event),

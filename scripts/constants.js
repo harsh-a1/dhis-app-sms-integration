@@ -8,13 +8,14 @@ const ACTION_IMPORT = "ACTION_IMPORT";
 const UPDATE = "UPDATE";
 const CREATE_EVENT = "CREATE_EVENT";
 const NOT_APPLICABLE = "N/A";
+const SKIP = "SKIP";
 //STates
 const START_STATE = "START_STATE";
 const INVALID_PHONE = "INVALID_PHONE";
 
 
 // interpretations
-const ONHOLD = "ONHOLD";
+const ONHOLD = "START_MSG";
 const PROVIDER_ID = "providerID";
 const MAWRAID = "MawraId";
 const INVALID_FORMAT = "INVALID_FORMAT";

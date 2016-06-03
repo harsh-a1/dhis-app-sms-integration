@@ -6,6 +6,8 @@
 <div id="mainPage">
     <h3>Import SMS messages from Mobilink</h3><br>
     <div>
+        <input type="checkbox" ng-model="skipInvalid">Skip Invalid SMS?<br>
+
         <label>Choose Dates Between </label>
         <input type="date" ng-model="startDate" max="{{dateToday}}"> <b>AND</b>
         <input type="date" ng-model="endDate" max="{{dateToday}}">
