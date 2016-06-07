@@ -7,9 +7,15 @@ skeletonApp
                                          $scope,$timeout,
                                         MetadataService,utilityService){
 
+   //scheduleImport();
+    function scheduleImport(){
+        var sched = later.parse.recur().every(24).hour(),
+            t = later.setInterval(init, sched)
 
+    }
 
-    $scope.MOBILINK = "http://221.132.117.58:7700/receivesms_xml.php";
+    $scope.init =init;
+        $scope.MOBILINK = "http://221.132.117.58:7700/receivesms_xml.php";
     $scope.skipInvalid = true;
     $scope.skipIPC = false;
     $scope.skipSales = true;
@@ -20,7 +26,6 @@ skeletonApp
     $timeout(function(){
         $scope.startDate = DateToday;
         $scope.endDate = DateToday;
-
         $scope.dateToday = DateToday.getFullYear()+"-"+(DateToday.getMonth().length==1?(parseInt(DateToday.getMonth())+1):"0"+(parseInt(DateToday.getMonth())+1))+"-"+DateToday.getDate();
     })
 
@@ -68,7 +73,7 @@ skeletonApp
     return def;
     }
 
-    $scope.init = function(){
+    function init(){
         if (!$scope.startDate && !$scope.endDate){
             alert("Please select both start and end date");
             return

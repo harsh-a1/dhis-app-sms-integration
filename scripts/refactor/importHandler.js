@@ -75,8 +75,29 @@ function importHandler(state,sms,callback){
             }
         }
 
-            event.dataValues.push({dataElement:DE_previousMessageTimestamp,value : new Date(state.mawraData.timestamp)});
-            event.dataValues.push({dataElement:DE_previousMessageField,value : state.mawraData.mawraID});
+        //get prev message data
+        var prev_timestamp = undefined;
+        var prev_value = undefined;
+        var prev_data_holder = undefined;
+
+        switch(state.firstWord){
+            case BACK_CHECK :
+            case FOLLOW_UP_VISITS :
+            case HOUSEHOLD_VISITS :
+                                    prev_data_holder = "mawraData";
+                                    break
+            case NEIGBOURHOOD_MEETING :
+            case ORIENTATION_MEETING :
+            case AREA_MAPPING :
+                prev_data_holder = "providerData";
+                break
+        }
+
+        prev_timestamp = state[prev_data_holder].timestamp;
+        prev_value = state[prev_data_holder].value;
+
+            event.dataValues.push({dataElement:DE_previousMessageTimestamp,value : prev_timestamp});
+            event.dataValues.push({dataElement:DE_previousMessageField,value : prev_value});
             event.dataValues.push({dataElement:DE_shortcode,value : sms.smsTo});
 
         getEventIfExists(startDate,timestamp,programStage,state.tei.trackedEntityInstance).then(function(eventUID){

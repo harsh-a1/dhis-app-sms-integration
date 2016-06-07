@@ -11,18 +11,18 @@ function messageParser(state,msg,smsTo){
     if (firstWord[0] == 'Z'){
         // is provider code
         state.changeState(ONHOLD);
-        state.providerData.providerID = firstWord;
+        state.providerData.value = firstWord;
         state.providerData.timestamp = smsTo;
         return
     }
-debugger
+
     switch(firstWord){
         case BACK_CHECK :
         case FOLLOW_UP_VISITS :
         case HOUSEHOLD_VISITS :
             if (words.length == 2){
                 state.changeState(ONHOLD);
-                state.mawraData.mawraID = words[1];
+                state.mawraData.value = words[1];
                 state.mawraData.timestamp = smsTo;
                 state.mawraData.prevMawra = words[1];
                 return
