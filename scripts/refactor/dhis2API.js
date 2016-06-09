@@ -16,7 +16,7 @@ dhis2API.event = function(){
 }
 
 
-dhis2API.event.prototype.POST = function(msgType,smsDate,callback){
+dhis2API.event.prototype.POST = function(msgType,smsDate,phone,callback){
     var event = this.getAPIObject()
     var def = $.Deferred();
 
@@ -30,6 +30,7 @@ dhis2API.event.prototype.POST = function(msgType,smsDate,callback){
             response.smsDate = smsDate;
             response.messageType = msgType;
             response.importType = CREATE_EVENT;
+            response.phone = phone;
 
             callback(response)
         },
@@ -37,6 +38,7 @@ dhis2API.event.prototype.POST = function(msgType,smsDate,callback){
             response.smsDate = smsDate;
             response.messageType = msgType;
             response.importType = CREATE_EVENT;
+            response.phone = phone;
 
             callback(response)
         }
@@ -45,7 +47,7 @@ dhis2API.event.prototype.POST = function(msgType,smsDate,callback){
     return def;
 }
 
-dhis2API.event.prototype.PUT = function(msgType,smsDate,callback,eventUID){
+dhis2API.event.prototype.PUT = function(msgType,smsDate,phone,callback,eventUID){
     var event = this.getAPIObject()
     var def = $.Deferred();
 
@@ -60,6 +62,8 @@ dhis2API.event.prototype.PUT = function(msgType,smsDate,callback,eventUID){
             response.messageType = msgType;
             response.importType = UPDATE;
             response.reference = eventUID;
+            response.phone = phone;
+
             callback(response)
         },
         error: function(response){
@@ -67,6 +71,7 @@ dhis2API.event.prototype.PUT = function(msgType,smsDate,callback,eventUID){
             response.messageType = msgType;
             response.importType = UPDATE;
             response.reference = eventUID;
+            response.phone = phone;
 
             callback(response)
         }

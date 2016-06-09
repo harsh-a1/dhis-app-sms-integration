@@ -3,6 +3,12 @@
  */
 
 function importHandler(state,sms,callback){
+    var phone = sms.smsFrom.substr(1,sms.smsFrom.length);// remove + sign from number
+
+    //if (isForSkipping()){
+    //    skipSMS();
+    //    return
+    //}
 
     switch(state.currentState){
         case INVALID_PHONE : if (isForSkipping()){
@@ -36,11 +42,10 @@ function importHandler(state,sms,callback){
             event.dataValues.push({dataElement:DE_shortcode,value : sms.smsTo});
 
         getEventIfExists_INVALID_PHONE(startDate,timestamp,invalidProgramUID).then(function(eventUID){
-
             if (eventUID){
-                event.PUT(state.messageType,sms.smsDate,callback,eventUID);
+                event.PUT(state.messageType,sms.smsDate,phone,callback,eventUID);
             }else{ //create a new one
-                event.POST(state.messageType,sms.smsDate,callback);
+                event.POST(state.messageType,sms.smsDate,phone,callback);
             }
         })
     }
@@ -76,8 +81,8 @@ function importHandler(state,sms,callback){
         }
 
         //get prev message data
-        var prev_timestamp = undefined;
-        var prev_value = undefined;
+        var prev_timestamp ;
+        var prev_value;
         var prev_data_holder = undefined;
 
         switch(state.firstWord){
@@ -89,8 +94,8 @@ function importHandler(state,sms,callback){
             case NEIGBOURHOOD_MEETING :
             case ORIENTATION_MEETING :
             case AREA_MAPPING :
-                prev_data_holder = "providerData";
-                break
+                                    prev_data_holder = "providerData";
+                                    break
         }
 
         prev_timestamp = state[prev_data_holder].timestamp;
@@ -102,10 +107,10 @@ function importHandler(state,sms,callback){
 
         getEventIfExists(startDate,timestamp,programStage,state.tei.trackedEntityInstance).then(function(eventUID){
             if (eventUID){
-                event.PUT(state.messageType,sms.smsDate,callback,eventUID);
+                event.PUT(state.messageType,sms.smsDate,phone,callback,eventUID);
             }else{
                 //create a new one
-                event.POST(state.messageType,sms.smsDate,callback);
+                event.POST(state.messageType,sms.smsDate,phone,callback);
             }
         })
     }
@@ -117,7 +122,6 @@ function importHandler(state,sms,callback){
         var startDate = sms.smsDate.split(" ")[0];
         var DE_shortcode = FFM_METADATA_MAP[state.currentState].DE_shortcode;
         var DE_smsMessage = FFM_METADATA_MAP[state.currentState].DE_smsMessage;
-
 
         var orgUnit = FFM_METADATA_MAP[state.currentState].orgUnit;
 
@@ -133,10 +137,10 @@ function importHandler(state,sms,callback){
 
         getEventIfExists(startDate,timestamp,programStage,state.tei.trackedEntityInstance).then(function(eventUID){
             if (eventUID){
-                event.PUT(state.messageType,sms.smsDate,callback,eventUID);
+                event.PUT(state.messageType,sms.smsDate,phone,callback,eventUID);
             }else{
                 //create a new one
-                event.POST(state.messageType,sms.smsDate,callback);
+                event.POST(state.messageType,sms.smsDate,phone,callback);
             }
         })
     }
@@ -146,6 +150,7 @@ function importHandler(state,sms,callback){
         response.smsDate = sms.smsDate;
         response.messageType = state.messageType;
         response.importType = SKIP;
+        response.phone = phone;
     callback(response);
     }
 

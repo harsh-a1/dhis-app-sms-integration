@@ -25,13 +25,13 @@ Summary.prototype.addSMSDetails = function(phone, sms){
     smsItem.shortcode = sms.shortcode;
     smsItem.smsDate = sms.smsDate;
 
-    this.smsMapByTimestamp[smsItem.smsDate] = smsItem;
+    this.smsMapByTimestamp[phone+"-"+smsItem.smsDate] = smsItem;
     this.rowMapForSMS[phone].push(smsItem);
 
 }
 
-Summary.prototype.addOnHoldResponse = function(sms,state){
-    var smsItem = this.smsMapByTimestamp[sms.smsDate];
+Summary.prototype.addOnHoldResponse = function(phone,sms,state){
+    var smsItem = this.smsMapByTimestamp[phone+"-"+sms.smsDate];
 
     smsItem.status = NOT_APPLICABLE;
     smsItem.conflicts = undefined;
@@ -40,10 +40,10 @@ Summary.prototype.addOnHoldResponse = function(sms,state){
     smsItem.importType = NOT_APPLICABLE;
 
 
-    this.smsMapByTimestamp[sms.smsDate] = smsItem;
+    this.smsMapByTimestamp[phone+"-"+sms.smsDate] = smsItem;
 }
 Summary.prototype.addResponse = function(response){
-    var smsItem = this.smsMapByTimestamp[response.smsDate];
+    var smsItem = this.smsMapByTimestamp[response.phone+"-"+response.smsDate];
 
     smsItem.status = findStatus(response);
     smsItem.conflicts = findConflicts(response);

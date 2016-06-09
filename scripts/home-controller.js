@@ -68,11 +68,20 @@ skeletonApp
 
             $scope.smsDataGroupedByPhone = utilityService.prepareListFromMap( $scope.smsDataGroupedByPhone);
 
+            //printList($scope.smsDataGroupedByPhone)
             def.resolve($scope.smsDataGroupedByPhone);
         })
     return def;
     }
 
+    function printList(smsDataGroupedByPhone){
+        for (var i=0;i<smsDataGroupedByPhone.length;i++){
+            for (var j=0;j<smsDataGroupedByPhone[i].length;j++){
+                console.log(smsDataGroupedByPhone[i][j].smsDate);
+            }
+        }
+        debugger
+    }
     function init(){
         if (!$scope.startDate && !$scope.endDate){
             alert("Please select both start and end date");
@@ -122,10 +131,17 @@ skeletonApp
                     importSummary.addSMSDetails(phone,sms);
                     messageParser(state,sms.smsMessage,new Date(sms.smsDate));
                         if (state.currentState == ONHOLD){
-                            importSummary.addOnHoldResponse(sms,state);
+                            state.pairReady = true;
+                            importSummary.addOnHoldResponse(phone,sms,state);
                             continue;
                         }
-                    importHandler(state,sms,callback);
+                    if (state.pairReady){
+                        importHandler(Object.assign({},state),sms,callback);
+                        state.pairReady=false;
+                    }else{
+                        state.changeState(INVALID_FORMAT);
+                        importHandler(Object.assign({},state),sms,callback);
+                    }
                 }
             }else{
                 state.changeState(INVALID_PHONE);
@@ -133,14 +149,14 @@ skeletonApp
                     var sms = smsList[i];
 
                     importSummary.addSMSDetails(phone,sms);
-                    importHandler(state,sms,callback);
+                    importHandler(Object.assign({},state),sms,callback);
                 }
             }
             setTimeout(function(){
                 processData(smsData,index+1);
             },10)
-
         })
+
         function callback(response){
             importSummary.addResponse(response);
             $timeout(function(){

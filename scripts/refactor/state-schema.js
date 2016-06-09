@@ -10,6 +10,7 @@ StateMachine = function(){
     this.providerData = {}
     this.mawraData = {};
     this.domain = "";
+    this.pairReady=false
 
 }
 
