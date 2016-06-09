@@ -22,7 +22,7 @@ StateMachine.prototype.changeState = function(state){
     this.currentState = state;
     this.messageType = state;
 
-    if (state == INVALID_PHONE){
+    if (state == INVALID_PHONE || state == INVALID_PAIR){
         this.domain = DOMAIN_INVALID;
     }
 }

@@ -22,6 +22,7 @@ const ONHOLD = "START_MSG";
 const PROVIDER_ID = "providerID";
 const MAWRAID = "MawraId";
 const INVALID_FORMAT = "INVALID_FORMAT";
+const INVALID_PAIR = "INVALID_PAIR";
 
 // Sub Domains
 const ORIENTATION_MEETING = "OM";
@@ -89,6 +90,15 @@ const FFM_METADATA_MAP = {
         DE_shortcode : Shortcode
     },
     INVALID_FORMAT : {
+        pattern : {  },
+        program : PR_FFM_IPC,
+        orgUnit : ROOT_OU_UID,
+        programStage : PRST_INVALID_FORMAT,
+        DE_smsMessage : INVALID_smsMessage,
+        DE_shortcode : Shortcode,
+        DE_smsTo : INVALID_smsTo
+    },
+    INVALID_PAIR : {
         pattern : {  },
         program : PR_FFM_IPC,
         orgUnit : ROOT_OU_UID,

@@ -19,6 +19,7 @@ function importHandler(state,sms,callback){
                            skipSMS(); break
                             }
                             prepareEvent();break
+        case INVALID_PAIR :
         case INVALID_FORMAT : if (isForSkipping()){
                                     skipSMS(); break
                                     }

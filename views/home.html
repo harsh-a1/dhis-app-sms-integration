@@ -15,8 +15,8 @@
 
         <label>Choose Dates Between </label>
 
-        <input type="date" ng-model="startDate" max="{{dateToday}}"> <b>AND</b>
-        <input type="date" ng-model="endDate" max="{{dateToday}}">
+        <input type="datetime-local" ng-model="startDate" max="{{dateToday}}"> <b>AND</b>
+        <input type="datetime-local" ng-model="endDate" max="{{dateToday}}">
         <input type="button" class="btn btn-success" value="Import" ng-click="init()">
     </div>
     <br><br>

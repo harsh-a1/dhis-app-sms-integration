@@ -16,8 +16,7 @@ function messageParser(state,msg,smsTo){
             state.providerData.timestamp = smsTo;
             return
         }else{
-            state.changeState(INVALID_FORMAT);
-            state.domain = DOMAIN_INVALID;
+            invalidImport()
             return
         }
     }
@@ -26,42 +25,51 @@ function messageParser(state,msg,smsTo){
         case FOLLOW_UP_VISITS :
         case HOUSEHOLD_VISITS :
 
-            if (words.length == 2){
-                state.changeState(ONHOLD);
-                state.mawraData.value = words[1];
-                state.mawraData.timestamp = smsTo;
-                state.mawraData.prevMawra = words[1];
-                return
-            }
+                                 if (words.length == 2){
+                                    state.changeState(ONHOLD);
+                                    state.mawraData.value = words[1];
+                                    state.mawraData.timestamp = smsTo;
+                                    state.mawraData.prevMawra = words[1];
+                                    return
+                                 }
 
-            if (words.length!=4){
-                state.changeState(INVALID_FORMAT);
-                state.domain = DOMAIN_INVALID;
-                return
-            }
+                                        if (words.length!=4){
+                                            invalidImport()
+                                        }
+                                        actionImport()
+                                        break
+
         case NEIGBOURHOOD_MEETING :
         case ORIENTATION_MEETING :
-            if (words.length!=3){
-                state.changeState(INVALID_FORMAT);
-                state.domain = DOMAIN_INVALID;
-                return
-            }
+                                        if (words.length!=2){
+                                            invalidImport()
+                                        }
+                                        actionImport()
+                                        break
+
         case AREA_MAPPING :
-            if (words.length !=1){
-                state.changeState(INVALID_FORMAT);
-                state.domain = DOMAIN_INVALID;
-                return
-            }
-                state.changeState(ACTION_IMPORT);
-                state.firstWord = firstWord;
-                state.words = words;
-                state.domain = DOMAIN_IPC;
-                return
-     //   case BACK_CHECK :
+                                        if (words.length !=1){
+                                            invalidImport()
+                                        }
+                                        actionImport()
+                                        break
         default :
-                state.changeState(INVALID_FORMAT);
-                state.domain = DOMAIN_INVALID;
-                return
+                                        invalidImport()
+    }
+
+
+    function actionImport(){
+        state.changeState(ACTION_IMPORT);
+        state.firstWord = firstWord;
+        state.words = words;
+        state.domain = DOMAIN_IPC;
+        return
+    }
+
+    function invalidImport(){
+        state.changeState(INVALID_FORMAT);
+        state.domain = DOMAIN_INVALID;
+        return
     }
 }
 

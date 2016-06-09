@@ -9,11 +9,19 @@ skeletonApp
 
    //scheduleImport();
     function scheduleImport(){
-        var sched = later.parse.recur().every(24).hour(),
-            t = later.setInterval(init, sched)
+        var sched = later.parse.recur().every(120).minute(),
+            t = later.setInterval(scheduler, sched)
 
     }
 
+    function scheduler(){
+        $scope.startDate = moment(new Date()).
+                            subtract({'hours':2}).format("YYYY-MM-DD HH:m:s")
+        $scope.endDate = moment(new Date()).
+                        format("YYYY-MM-DD HH:m:s")
+        debugger
+        init();
+    }
     $scope.init =init;
         $scope.MOBILINK = "http://221.132.117.58:7700/receivesms_xml.php";
     $scope.skipInvalid = true;
@@ -139,7 +147,7 @@ skeletonApp
                         importHandler(Object.assign({},state),sms,callback);
                         state.pairReady=false;
                     }else{
-                        state.changeState(INVALID_FORMAT);
+                        state.changeState(INVALID_PAIR);
                         importHandler(Object.assign({},state),sms,callback);
                     }
                 }
