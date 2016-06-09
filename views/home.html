@@ -12,14 +12,14 @@
         <input disabled type="checkbox" ng-model="skipSales">Check to Skip Sales<br>
         <input disabled type="checkbox" ng-model="skipHS">Check to Skip HS<br>
 
-
         <label>Choose Dates Between </label>
 
-        <input type="datetime-local" ng-model="startDate" max="{{dateToday}}"> <b>AND</b>
-        <input type="datetime-local" ng-model="endDate" max="{{dateToday}}">
+        <input type="datetime-local" ng-model="startDate" > <b>AND</b>
+        <input type="datetime-local" ng-model="endDate" >
         <input type="button" class="btn btn-success" value="Import" ng-click="init()">
     </div>
     <br><br>
+    <label ng-show="showMsgToUser">{{messageToUser}}</label>
     <table class="table-bordered reportTable" >
         <tr>
             <th>#</th>

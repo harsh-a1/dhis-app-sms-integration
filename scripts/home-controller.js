@@ -7,20 +7,26 @@ skeletonApp
                                          $scope,$timeout,
                                         MetadataService,utilityService){
 
-   //scheduleImport();
-    function scheduleImport(){
-        var sched = later.parse.recur().every(120).minute(),
-            t = later.setInterval(scheduler, sched)
+    $scope.showMsgToUser = false;
 
+    duration = 1;
+   scheduleImport();
+    function scheduleImport(){
+        var sched = later.parse.recur().every(duration).minute(),
+            t = later.setInterval(scheduler, sched)
     }
 
     function scheduler(){
-        $scope.startDate = moment(new Date()).
-                            subtract({'hours':2}).format("YYYY-MM-DD HH:m:s")
-        $scope.endDate = moment(new Date()).
-                        format("YYYY-MM-DD HH:m:s")
-        debugger
-        init();
+        $timeout(function(){
+            $scope.startDate = new Date(moment(new Date()).
+            subtract({'minutes':duration}).format("YYYY-MM-DD HH:m:s"));
+
+            $scope.endDate = new Date(moment(new Date()).
+            format("YYYY-MM-DD HH:m:s"));
+            console.log("Import  -"+new Date())
+            init();
+        },10)
+
     }
     $scope.init =init;
         $scope.MOBILINK = "http://221.132.117.58:7700/receivesms_xml.php";
@@ -34,7 +40,10 @@ skeletonApp
     $timeout(function(){
         $scope.startDate = DateToday;
         $scope.endDate = DateToday;
-        $scope.dateToday = DateToday.getFullYear()+"-"+(DateToday.getMonth().length==1?(parseInt(DateToday.getMonth())+1):"0"+(parseInt(DateToday.getMonth())+1))+"-"+DateToday.getDate();
+      //  $scope.dateToday = DateToday.getFullYear()+"-"+(DateToday.getMonth().length==1?(parseInt(DateToday.getMonth())+1):"0"+(parseInt(DateToday.getMonth())+1))+"-"+DateToday.getDate();
+        $scope.dateToday = new Date();
+        scheduler();
+
     })
 
     MetadataService.getCurrentUser().then(function(me) {
@@ -65,9 +74,10 @@ skeletonApp
         getDataFromMobilink(XML).then(function(json){
 
             if (json.SMSRsponse){
-                if(json.SMSRsponse.Error)
-                    alert(json.SMSRsponse.Error);
-
+                if(json.SMSRsponse.Error){
+                    $scope.showMsgToUser = true;
+                    $scope.messageToUser = json.SMSRsponse.Error;
+                }
                 stopLoader();
                 return
             }
@@ -92,9 +102,14 @@ skeletonApp
     }
     function init(){
         if (!$scope.startDate && !$scope.endDate){
-            alert("Please select both start and end date");
-            return
+            $timeout(function(){
+                $scope.showMsgToUser = true;
+                $scope.messageToUser = "Please select dates";
+                return
+            })
         }
+
+        $scope.showMsgToUser = false;
 
         $scope.loading = true;
 
