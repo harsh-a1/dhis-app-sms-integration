@@ -10,7 +10,7 @@ skeletonApp
     $scope.showMsgToUser = false;
 
     duration = 1;
-   scheduleImport();
+   //scheduleImport();
     function scheduleImport(){
         var sched = later.parse.recur().every(duration).minute(),
             t = later.setInterval(scheduler, sched)
@@ -42,7 +42,7 @@ skeletonApp
         $scope.endDate = DateToday;
       //  $scope.dateToday = DateToday.getFullYear()+"-"+(DateToday.getMonth().length==1?(parseInt(DateToday.getMonth())+1):"0"+(parseInt(DateToday.getMonth())+1))+"-"+DateToday.getDate();
         $scope.dateToday = new Date();
-        scheduler();
+        //scheduler();
 
     })
 
@@ -110,7 +110,6 @@ skeletonApp
         }
 
         $scope.showMsgToUser = false;
-
         $scope.loading = true;
 
         state = new StateMachine();
@@ -120,7 +119,6 @@ skeletonApp
         state.skipCriteria[DOMAIN_SALES] = $scope.skipSales;
         state.skipCriteria[DOMAIN_HS] = $scope.skipHS;
         state.skipCriteria[DOMAIN_INVALID] = $scope.skipInvalid;
-
 
         importSummary = new Summary();
 

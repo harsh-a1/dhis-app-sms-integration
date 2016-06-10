@@ -35,14 +35,22 @@ function messageParser(state,msg,smsTo){
 
                                         if (words.length!=4){
                                             invalidImport()
+                                            break
                                         }
                                         actionImport()
                                         break
 
         case NEIGBOURHOOD_MEETING :
+                                        if (words.length!=3){
+                                            invalidImport()
+                                            break
+                                        }
+                                            actionImport()
+                                            break
         case ORIENTATION_MEETING :
                                         if (words.length!=2){
                                             invalidImport()
+                                            break
                                         }
                                         actionImport()
                                         break
@@ -50,6 +58,7 @@ function messageParser(state,msg,smsTo){
         case AREA_MAPPING :
                                         if (words.length !=1){
                                             invalidImport()
+                                            break
                                         }
                                         actionImport()
                                         break
