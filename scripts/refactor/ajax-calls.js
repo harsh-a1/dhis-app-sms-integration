@@ -2,6 +2,7 @@
  * Created by harsh on 14/5/16.
  */
 
+var request = require('request');
 function getEventIfExists_INVALID_PHONE(startDate,timestamp,program){
     var def = $.Deferred();
     $.ajax({
@@ -40,4 +41,19 @@ function getEventIfExists(startDate,timestamp,programStage,tei){
         }
     });
     return def;
+}
+
+
+exports.getReqJSONP = function(url,data,callback) {
+    request({
+        url: url,
+        method: "GET",
+        dataType: "jsonp",
+        crossDomain: true,
+        data : "xmldoc="+data,
+        jsonpCallback: 'response'
+    }, function (error, response, body) {
+        callback(error,response,body);
+
+    });
 }

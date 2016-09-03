@@ -1,0 +1,30 @@
+{
+  "name": "green-star-sms",
+  "version": "1.0.0",
+  "description": "middle layer between SMS vendor and DHIS2",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hispindia/nvbdcp-node.git"
+  },
+  "author": "harsh atal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hispindia/nvbdcp-node/issues"
+  },
+  "homepage": "https://github.com/hispindia/nvbdcp-node#readme",
+  "dependencies": {
+    "winston": "2.2.0",
+    "log4js": "^0.6.12",
+    "express" : "4.14.0",
+    "request": "2.72.0",
+    "q" : "1.4.1",
+    "moment" : "2.13.0",
+    "body-parser" : "1.15.2",
+    "later": "1.2.0"
+  }
+}

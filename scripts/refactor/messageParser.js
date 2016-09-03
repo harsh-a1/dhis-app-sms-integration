@@ -4,6 +4,8 @@
 
 function messageParser(state,msg,smsTo){
 
+  var CONSTANTS = require('./constants');
+
     var words = getWords(msg.toUpperCase()," ");
 
     var firstWord = words[0];
@@ -11,7 +13,7 @@ function messageParser(state,msg,smsTo){
     if (firstWord[0] == 'Z'){
         if (words.length==1){
             // is provider code
-            state.changeState(ONHOLD);
+            state.changeState(CONSTANTS.ONHOLD);
             state.providerData.value = firstWord;
             state.providerData.timestamp = smsTo;
             return
@@ -22,11 +24,11 @@ function messageParser(state,msg,smsTo){
     }
 
     switch(firstWord){
-        case FOLLOW_UP_VISITS :
-        case HOUSEHOLD_VISITS :
+        case CONSTANTS.FOLLOW_UP_VISITS :
+        case CONSTANTS.HOUSEHOLD_VISITS :
 
                                  if (words.length == 2){
-                                    state.changeState(ONHOLD);
+                                    state.changeState(CONSTANTS.ONHOLD);
                                     state.mawraData.value = words[1];
                                     state.mawraData.timestamp = smsTo;
                                     state.mawraData.prevMawra = words[1];
@@ -40,14 +42,14 @@ function messageParser(state,msg,smsTo){
                                         actionImport()
                                         break
 
-        case NEIGBOURHOOD_MEETING :
+        case CONSTANTS.NEIGBOURHOOD_MEETING :
                                         if (words.length!=3){
                                             invalidImport()
                                             break
                                         }
                                             actionImport()
                                             break
-        case ORIENTATION_MEETING :
+        case CONSTANTS.ORIENTATION_MEETING :
                                         if (words.length!=2){
                                             invalidImport()
                                             break
@@ -55,7 +57,7 @@ function messageParser(state,msg,smsTo){
                                         actionImport()
                                         break
 
-        case AREA_MAPPING :
+        case CONSTANTS.AREA_MAPPING :
                                         if (words.length !=1){
                                             invalidImport()
                                             break
@@ -68,16 +70,16 @@ function messageParser(state,msg,smsTo){
 
 
     function actionImport(){
-        state.changeState(ACTION_IMPORT);
+        state.changeState(CONSTANTS.ACTION_IMPORT);
         state.firstWord = firstWord;
         state.words = words;
-        state.domain = DOMAIN_IPC;
+        state.domain = CONSTANTS.DOMAIN_IPC;
         return
     }
 
     function invalidImport(){
-        state.changeState(INVALID_FORMAT);
-        state.domain = DOMAIN_INVALID;
+        state.changeState(CONSTANTS.INVALID_FORMAT);
+        state.domain = CONSTANTS.DOMAIN_INVALID;
         return
     }
 }
@@ -87,3 +89,5 @@ function getWords(text,separatedBy){
     words = text.split(separatedBy);
     return words;
 }
+
+exports.messageParser = messageParser;

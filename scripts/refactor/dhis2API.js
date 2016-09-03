@@ -91,3 +91,5 @@ dhis2API.event.prototype.getAPIObject = function(){
     }
     return ent;
 }
+
+exports.dhis2API = dhis2API;

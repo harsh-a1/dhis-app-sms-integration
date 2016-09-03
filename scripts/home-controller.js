@@ -29,7 +29,7 @@ skeletonApp
 
     }
     $scope.init =init;
-        $scope.MOBILINK = "http://221.132.117.58:7700/receivesms_xml.php";
+    $scope.MOBILINK = "http://221.132.117.58:7700/receivesms_xml.php";
     $scope.skipInvalid = true;
     $scope.skipIPC = false;
     $scope.skipSales = true;
@@ -44,11 +44,11 @@ skeletonApp
         $scope.dateToday = new Date();
         //scheduler();
 
-    })
+    });
 
     MetadataService.getCurrentUser().then(function(me) {
     $scope.currentUser = me;
-    })
+    });
 
 
     function getDataFromMobilink(XML){

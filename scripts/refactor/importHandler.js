@@ -3,6 +3,9 @@
  */
 
 function importHandler(state,sms,callback){
+    var CONSTANTS = require('./constants');
+    var dhis2API = require('./scripts/refactor/dhis2API');
+
     var phone = sms.smsFrom.substr(1,sms.smsFrom.length);// remove + sign from number
 
     //if (isForSkipping()){
@@ -11,28 +14,28 @@ function importHandler(state,sms,callback){
     //}
 
     switch(state.currentState){
-        case INVALID_PHONE : if (isForSkipping()){
+        case CONSTANTS.INVALID_PHONE : if (isForSkipping()){
                                 skipSMS(); break
                                 }
                             prepareInvalidEvent();break
-        case ACTION_IMPORT : if (isForSkipping()){
+        case CONSTANTS.ACTION_IMPORT : if (isForSkipping()){
                            skipSMS(); break
                             }
                             prepareEvent();break
-        case INVALID_PAIR :
-        case INVALID_FORMAT : if (isForSkipping()){
+        case CONSTANTS.INVALID_PAIR :
+        case CONSTANTS.INVALID_FORMAT : if (isForSkipping()){
                                     skipSMS(); break
                                     }
                             prepareInvalidFormatEvent(); break
     }
 
     function prepareInvalidEvent(){
-        var invalidProgramUID = FFM_METADATA_MAP[state.currentState].program;
+        var invalidProgramUID = CONSTANTS.FFM_METADATA_MAP[state.currentState].program;
         var timestamp = new Date(sms.smsDate);
         var startDate = sms.smsDate.split(" ")[0];
-        var DE_smsMessage = FFM_METADATA_MAP[state.currentState].DE_smsMessage;
-        var DE_shortcode = FFM_METADATA_MAP[state.currentState].DE_shortcode;
-        var orgUnit = FFM_METADATA_MAP[state.currentState].orgUnit;
+        var DE_smsMessage = CONSTANTS.FFM_METADATA_MAP[state.currentState].DE_smsMessage;
+        var DE_shortcode = CONSTANTS.FFM_METADATA_MAP[state.currentState].DE_shortcode;
+        var orgUnit = CONSTANTS.FFM_METADATA_MAP[state.currentState].orgUnit;
 
         var event = new dhis2API.event();
             event.program = invalidProgramUID;
@@ -52,15 +55,15 @@ function importHandler(state,sms,callback){
     }
 
     function prepareEvent(){
-        var program = FFM_METADATA_MAP[state.firstWord].program;
-        var programStage = FFM_METADATA_MAP[state.firstWord].programStage;
+        var program = CONSTANTS.FFM_METADATA_MAP[state.firstWord].program;
+        var programStage = CONSTANTS.FFM_METADATA_MAP[state.firstWord].programStage;
         var timestamp = new Date(sms.smsDate);
         var startDate = sms.smsDate.split(" ")[0];
-        var DE_shortcode = FFM_METADATA_MAP[state.firstWord].DE_shortcode;
-        var DE_previousMessageTimestamp = FFM_METADATA_MAP[state.firstWord].DE_previousMessageTimestamp;
-        var DE_previousMessageField = FFM_METADATA_MAP[state.firstWord].DE_previousMessageField;
+        var DE_shortcode = CONSTANTS.FFM_METADATA_MAP[state.firstWord].DE_shortcode;
+        var DE_previousMessageTimestamp = CONSTANTS.FFM_METADATA_MAP[state.firstWord].DE_previousMessageTimestamp;
+        var DE_previousMessageField = CONSTANTS.FFM_METADATA_MAP[state.firstWord].DE_previousMessageField;
 
-        var orgUnit = FFM_METADATA_MAP[state.firstWord].orgUnit;
+        var orgUnit = CONSTANTS.FFM_METADATA_MAP[state.firstWord].orgUnit;
 
         var event = new dhis2API.event();
             event.program = program;
@@ -69,7 +72,7 @@ function importHandler(state,sms,callback){
             event.tei = state.tei.trackedEntityInstance;
             event.eventDate = new Date(sms.smsDate);
 
-        var msgCategory = FFM_METADATA_MAP[state.firstWord];
+        var msgCategory = CONSTANTS.FFM_METADATA_MAP[state.firstWord];
 
         //Datavalues Parser
         for (var i=1;i<state.words.length;i++){
@@ -87,14 +90,14 @@ function importHandler(state,sms,callback){
         var prev_data_holder = undefined;
 
         switch(state.firstWord){
-            case BACK_CHECK :
-            case FOLLOW_UP_VISITS :
-            case HOUSEHOLD_VISITS :
+            case CONSTANTS.BACK_CHECK :
+            case CONSTANTS.FOLLOW_UP_VISITS :
+            case CONSTANTS.HOUSEHOLD_VISITS :
                                     prev_data_holder = "mawraData";
                                     break
-            case NEIGBOURHOOD_MEETING :
-            case ORIENTATION_MEETING :
-            case AREA_MAPPING :
+            case CONSTANTS.NEIGBOURHOOD_MEETING :
+            case CONSTANTS.ORIENTATION_MEETING :
+            case CONSTANTS.AREA_MAPPING :
                                     prev_data_holder = "providerData";
                                     break
         }
@@ -117,14 +120,14 @@ function importHandler(state,sms,callback){
     }
 
     function prepareInvalidFormatEvent(){
-        var program = FFM_METADATA_MAP[state.currentState].program;
-        var programStage = FFM_METADATA_MAP[state.currentState].programStage;
+        var program = CONSTANTS.FFM_METADATA_MAP[state.currentState].program;
+        var programStage = CONSTANTS.FFM_METADATA_MAP[state.currentState].programStage;
         var timestamp = new Date(sms.smsDate);
         var startDate = sms.smsDate.split(" ")[0];
-        var DE_shortcode = FFM_METADATA_MAP[state.currentState].DE_shortcode;
-        var DE_smsMessage = FFM_METADATA_MAP[state.currentState].DE_smsMessage;
+        var DE_shortcode = CONSTANTS.FFM_METADATA_MAP[state.currentState].DE_shortcode;
+        var DE_smsMessage = CONSTANTS.FFM_METADATA_MAP[state.currentState].DE_smsMessage;
 
-        var orgUnit = FFM_METADATA_MAP[state.currentState].orgUnit;
+        var orgUnit = CONSTANTS.FFM_METADATA_MAP[state.currentState].orgUnit;
 
         var event = new dhis2API.event();
         event.program = program;
@@ -162,3 +165,5 @@ function importHandler(state,sms,callback){
         return false;
     }
 }
+
+exports.importHandler = importHandler;

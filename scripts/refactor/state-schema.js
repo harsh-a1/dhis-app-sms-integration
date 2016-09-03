@@ -26,3 +26,5 @@ StateMachine.prototype.changeState = function(state){
         this.domain = DOMAIN_INVALID;
     }
 }
+
+exports.StateMachine = StateMachine;
