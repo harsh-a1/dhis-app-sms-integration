@@ -7,6 +7,7 @@ function messageParser(state,msg,smsTo){
     var words = getWords(msg.toUpperCase()," ");
 
     var firstWord = words[0];
+    var secondWord = words[1];
 
     if (firstWord[0] == 'Z'){
         if (words.length==1){
@@ -15,11 +16,42 @@ function messageParser(state,msg,smsTo){
             state.providerData.value = firstWord;
             state.providerData.timestamp = smsTo;
             return
-        }else{
-            invalidImport()
+        }
+    }
+    else if(firstWord[0] == 'I'){
+        if (words.length==1){
+            // is provider code
+            state.changeState(ONHOLD);
+            state.providerData.value = firstWord;
+            state.providerData.timestamp = smsTo;
+            return
+        }
+
+    }
+    // BC
+    else if(firstWord[0] == 'B' && secondWord[0] == 'I'){
+
+        if (words.length==2){
+            // is provider code
+            state.changeState(ONHOLD);
+            state.providerData.value = secondWord;
+            state.providerData.timestamp = smsTo;
+            return
+        }
+
+    }
+    // SSH
+    else if(firstWord[0] == 'I' && secondWord[0] == 'R'){
+
+        if (words.length==2){
+            // is provider code
+            state.changeState(ONHOLD);
+            state.providerData.value = secondWord;
+            state.providerData.timestamp = smsTo;
             return
         }
     }
+
 
     switch(firstWord){
         case FOLLOW_UP_VISITS :
@@ -46,7 +78,7 @@ function messageParser(state,msg,smsTo){
                                             break
                                         }
                                             actionImport()
-                                            break
+                                       break
         case ORIENTATION_MEETING :
                                         if (words.length!=2){
                                             invalidImport()
@@ -62,6 +94,46 @@ function messageParser(state,msg,smsTo){
                                         }
                                         actionImport()
                                         break
+
+        case SUPERVISORY_SUPPORT_ORIENTATION_MEETING :
+
+                                        if(words.length ==2){
+                                            actionImport()
+                                            break
+                                        }
+
+                                         invalidImport()
+                                           break
+
+        case SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING :
+
+                                        if(words.length ==4){
+                                            actionImport()
+
+                                            break
+                                        }
+                                        invalidImport();
+                                            break;
+
+        case BACK_CHECK :
+
+                                      if(words.length == 3) {
+                                          actionImport()
+                                          break
+                                      }
+                                    invalidImport()
+                                         break
+
+        case SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT :
+
+                                        if(words.length ==3){
+                                            actionImport()
+                                            break
+                                        }
+                                        invalidImport()
+                                             break
+
+
         default :
                                         invalidImport()
     }

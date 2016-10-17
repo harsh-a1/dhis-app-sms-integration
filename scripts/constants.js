@@ -31,6 +31,10 @@ const BACK_CHECK = "BC";
 const HOUSEHOLD_VISITS = "HH";
 const AREA_MAPPING = "AM";
 const FOLLOW_UP_VISITS = "FV";
+const SUPERVISORY_SUPPORT_ORIENTATION_MEETING= "SSO";
+const SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING = "SSN";
+const SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT = "SSH";
+
 
 // Operational mappings
 const PHONE_ATTR_UID = "SxSh9297ihW";
@@ -49,6 +53,10 @@ const PRST_AREA_MAPPING = "k7gHjJ4LFOU";
 const PRST_FOLLOWUP_VISITS = "hVVdocIy72g";
 const PRST_INVALID_FORMAT = "CCEEqcvtLjA";
 const PRST_INVALID = "pmj1wbykdGj";
+const PRST_ORIENTATION_MEETING_WITH_PROVIDER = "cl1PtRoB3uu";
+const PRST_SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING  = "gYaaS7ZgLQ3";
+const PRST_BACK_CHECKS = "XvHb30rWm8b";
+const PRST_SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT = "qAnwuzymSvu";
 
 /* Common */
 const ProviderCode = "sBD5FEalBsU";
@@ -57,6 +65,7 @@ const PreviousMessageTimestamp = "ILL6OzRVVrF";
 const FirstMawraID = "qbK1eGEgVD4";
 const Tokens_Issued = "gBdx1XMCySe";
 const LastMawraId = "vKpDeWYKhHk";
+const IPCCode = "RsuC8i6NWFF";
 
 
 /* Orientation Meeting  */
@@ -70,6 +79,20 @@ const HH_Clients_Registered = "nUqWTyxWCZs";
 
 /*Follow Up Visits*/
 const FV_clientsRegistered = "NoGwMfqdSOY";
+
+/*Orientation meeting with provider*/
+const SSO_NumOfParticipants ="Pusk3tS9CEP";
+
+/*Supervisory support of Neighbourhood Meeting */
+const SSN_NumOfMawra ="jQXsLw6MhVv";
+const SSN_NumOfMen = "Dd8Vn4QybC6";
+const SSN_NumOfMotherInLaw = "hR891IT7kV8";
+
+/*Back Checks*/
+const BC_NumOfBackChecks ="WWmfTaEY5Fh";
+
+/*Supervisory support of Household visits*/
+const SSH_clientsRegistered = "nUqWTyxWCZs";
 
 /* Inavlid */
 const INVALID_smsMessage = "lplLrUUG34W";
@@ -168,6 +191,62 @@ const FFM_METADATA_MAP = {
         DE_lastMawraId : LastMawraId,
         DE_tokensIssued : Tokens_Issued,
         DE_clientsRegistered :FV_clientsRegistered
+    },
+
+    SSO:{
+        pattern : { 1 :  "DE_numOfParticipants" },
+        program : PR_FFM_IPC,
+        programStage : PRST_ORIENTATION_MEETING_WITH_PROVIDER,
+        orgUnit : ROOT_OU_UID,
+        DE_previousMessageField : IPCCode,
+        DE_numOfParticipants : SSO_NumOfParticipants,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
+    },
+
+    SSN: {
+        pattern : { 1 :  "DE_numOfMawra" ,
+        2 : "DE_numOfMen",
+        3 : "DE_numOfMotherInLaw" },
+        program : PR_FFM_IPC,
+        programStage : PRST_SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING,
+        orgUnit : ROOT_OU_UID,
+        DE_previousMessageField : IPCCode,
+        DE_numOfMawra : SSN_NumOfMawra,
+        DE_numOfMen : SSN_NumOfMen,
+        DE_numOfMotherInLaw : SSN_NumOfMotherInLaw,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
+
+    },
+
+    BC: {
+        pattern : { 1 : "DE_numOfBackChecks"
+        },
+        program : PR_FFM_IPC ,
+        programStage: PRST_BACK_CHECKS,
+        orgUnit : ROOT_OU_UID,
+        DE_numOfBackChecks : BC_NumOfBackChecks,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
+    },
+
+    SSH: {
+        pattern : { 1 : "DE_lastMawraId",
+            2 : "DE_clientsRegistered"
+
+        },
+        program : PR_FFM_IPC,
+        programStage : PRST_SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT,
+        orgUnit : ROOT_OU_UID,
+        DE_previousMessageField : FirstMawraID,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp,
+        DE_lastMawraId : LastMawraId,
+        DE_clientsRegistered :SSH_clientsRegistered
     }
 
 }

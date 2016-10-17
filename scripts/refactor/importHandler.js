@@ -95,6 +95,8 @@ function importHandler(state,sms,callback){
             case NEIGBOURHOOD_MEETING :
             case ORIENTATION_MEETING :
             case AREA_MAPPING :
+            case SUPERVISORY_SUPPORT_ORIENTATION_MEETING :
+            case SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING :
                                     prev_data_holder = "providerData";
                                     break
         }
