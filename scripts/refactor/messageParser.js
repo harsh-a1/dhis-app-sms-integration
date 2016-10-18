@@ -41,7 +41,7 @@ function messageParser(state,msg,smsTo){
 
     }
     // SSH
-    else if(firstWord[0] == 'I' && secondWord[0] == 'R'){
+    else if(firstWord[0] == 'I' && secondWord){
 
         if (words.length==2){
             // is provider code
@@ -51,7 +51,6 @@ function messageParser(state,msg,smsTo){
             return
         }
     }
-
 
     switch(firstWord){
         case FOLLOW_UP_VISITS :
@@ -102,8 +101,8 @@ function messageParser(state,msg,smsTo){
                                             break
                                         }
 
-                                         invalidImport()
-                                           break
+                                            invalidImport()
+                                            break
 
         case SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING :
 
@@ -112,8 +111,8 @@ function messageParser(state,msg,smsTo){
 
                                             break
                                         }
-                                        invalidImport();
-                                            break;
+                                            invalidImport();
+                                                break;
 
         case BACK_CHECK :
 
@@ -121,7 +120,7 @@ function messageParser(state,msg,smsTo){
                                           actionImport()
                                           break
                                       }
-                                    invalidImport()
+                                        invalidImport()
                                          break
 
         case SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT :
@@ -132,7 +131,35 @@ function messageParser(state,msg,smsTo){
                                         }
                                         invalidImport()
                                              break
+        case TRAINING :
+                                          if (words.length==1){
 
+                                            actionImport()
+                                                break
+                                          }
+
+                                          invalidImport()
+                                                break
+
+        case MEETING :
+                                            if (words.length==1){
+                                                actionImport()
+                                               break
+                                      }
+
+                                         invalidImport()
+                                           break
+
+        case LEAVE :
+
+                                        if (words.length==1){
+
+                                            actionImport()
+                                              break
+                                         }
+
+                                        invalidImport()
+                                             break
 
         default :
                                         invalidImport()

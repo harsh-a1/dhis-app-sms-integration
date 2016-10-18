@@ -90,6 +90,7 @@ function importHandler(state,sms,callback){
             case BACK_CHECK :
             case FOLLOW_UP_VISITS :
             case HOUSEHOLD_VISITS :
+            case SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT :
                                     prev_data_holder = "mawraData";
                                     break
             case NEIGBOURHOOD_MEETING :
@@ -99,14 +100,27 @@ function importHandler(state,sms,callback){
             case SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING :
                                     prev_data_holder = "providerData";
                                     break
+
         }
+        if(sms.smsMessage =='TR' ||sms.smsMessage =='MTG' || sms.smsMessage =='OL' ){
+            prev_timestamp = "";
+            prev_value = "";
 
-        prev_timestamp = state[prev_data_holder].timestamp;
-        prev_value = state[prev_data_holder].value;
+            event.dataValues.push({dataElement: DE_previousMessageTimestamp, value: prev_timestamp});
+            event.dataValues.push({dataElement: DE_previousMessageField, value: prev_value});
+            event.dataValues.push({dataElement: DE_shortcode, value: sms.smsTo});
 
-            event.dataValues.push({dataElement:DE_previousMessageTimestamp,value : prev_timestamp});
-            event.dataValues.push({dataElement:DE_previousMessageField,value : prev_value});
-            event.dataValues.push({dataElement:DE_shortcode,value : sms.smsTo});
+        }
+        else {
+
+            prev_timestamp = state[prev_data_holder].timestamp;
+            prev_value = state[prev_data_holder].value;
+
+            event.dataValues.push({dataElement: DE_previousMessageTimestamp, value: prev_timestamp});
+            event.dataValues.push({dataElement: DE_previousMessageField, value: prev_value});
+            event.dataValues.push({dataElement: DE_shortcode, value: sms.smsTo});
+
+        }
 
         getEventIfExists(startDate,timestamp,programStage,state.tei.trackedEntityInstance).then(function(eventUID){
             if (eventUID){

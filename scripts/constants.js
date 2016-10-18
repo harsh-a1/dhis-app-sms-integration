@@ -34,6 +34,9 @@ const FOLLOW_UP_VISITS = "FV";
 const SUPERVISORY_SUPPORT_ORIENTATION_MEETING= "SSO";
 const SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING = "SSN";
 const SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT = "SSH";
+const TRAINING = "TR";
+const MEETING = "MTG";
+const LEAVE = "OL";
 
 
 // Operational mappings
@@ -43,6 +46,8 @@ const ADD_UPDATE_EVENT = "add_update_event";
 const ADD_UPDATE_EVENT_INVALID = "ADD_UPDATE_EVENT_INVALID";
 const ADD_UPDATE_EVENT_INVALID_PHONE = "ADD_UPDATE_EVENT_INVALID_PHONE";
 const PR_FFM_IPC = "TbYUPaBChYR";
+const PR_FFM_SUPERVISOR ="kHRsNFOgLN2";
+const PR_FFM_AM ="ghe98M1z5s7";
 const PR_FFM_INVALID = "QjQT4k8M4ma";
 
 //Program Stages
@@ -57,6 +62,9 @@ const PRST_ORIENTATION_MEETING_WITH_PROVIDER = "cl1PtRoB3uu";
 const PRST_SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING  = "gYaaS7ZgLQ3";
 const PRST_BACK_CHECKS = "XvHb30rWm8b";
 const PRST_SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT = "qAnwuzymSvu";
+const PRST_TRAINING_IPC = "MxHjgrTCsnB";
+const PRST_MEETING_IPC ="bLZzC5x8IBn";
+const PRST_LEAVE_IPC ="n0RPVGCbi7D";
 
 /* Common */
 const ProviderCode = "sBD5FEalBsU";
@@ -230,6 +238,7 @@ const FFM_METADATA_MAP = {
         orgUnit : ROOT_OU_UID,
         DE_numOfBackChecks : BC_NumOfBackChecks,
         DE_shortcode : Shortcode,
+        DE_previousMessageField : FirstMawraID,
         DE_previousMessageTimestamp : PreviousMessageTimestamp
 
     },
@@ -247,6 +256,33 @@ const FFM_METADATA_MAP = {
         DE_previousMessageTimestamp : PreviousMessageTimestamp,
         DE_lastMawraId : LastMawraId,
         DE_clientsRegistered :SSH_clientsRegistered
+    },
+
+    TR: {
+        program : PR_FFM_IPC ,
+        programStage: PRST_TRAINING_IPC,
+        orgUnit : ROOT_OU_UID,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
+    },
+
+    MTG: {
+        program : PR_FFM_IPC ,
+        programStage: PRST_MEETING_IPC,
+        orgUnit : ROOT_OU_UID,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
+    },
+
+    OL: {
+        program : PR_FFM_IPC ,
+        programStage: PRST_LEAVE_IPC,
+        orgUnit : ROOT_OU_UID,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
     }
 
 }

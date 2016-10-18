@@ -53,7 +53,14 @@ skeletonApp
 
     function getDataFromMobilink(XML){
         var def = $.Deferred();
+       /* var data1 = {
 
+            "SMSInfo":[
+                {"smsDate":"2016-08-03 14:24:23", "smsFrom":"+923000202272", "smsMessage":"IPC0001", "smsTo":"7005219"  }
+
+            ]
+
+        };*/
         MetadataService.getSMS(XML).then(function(data){
             var xmlStr = "";
             for (var i in data){
@@ -71,17 +78,26 @@ skeletonApp
 
     function getSMSDataJson(XML){
         var def = $.Deferred();
-        getDataFromMobilink(XML).then(function(json){
+       /* var json2 = {
 
-            if (json.SMSRsponse){
-                if(json.SMSRsponse.Error){
+            "SMSInfo":[
+                {"smsDate":"2016-08-03 14:24:23", "smsFrom":"+923000202272", "smsMessage":"IPC0001", "smsTo":"7005219"  }
+
+            ]
+
+        };*/
+        getDataFromMobilink(XML).then(function(json2){
+
+            if (json2.SMSRsponse){
+                if(json2.SMSRsponse.Error){
                     $scope.showMsgToUser = true;
-                    $scope.messageToUser = json.SMSRsponse.Error;
+                    $scope.messageToUser = json2.SMSRsponse.Error;
                 }
                 stopLoader();
                 return
             }
-             $scope.smsDataGroupedByPhone = utilityService.prepareMapGroupedById(json.SMSInfo,"smsFrom");
+
+             $scope.smsDataGroupedByPhone = utilityService.prepareMapGroupedById(json2.SMSInfo,"smsFrom");
              $scope.smsDataGroupedByPhone = utilityService.sort($scope.smsDataGroupedByPhone);
 
             $scope.smsDataGroupedByPhone = utilityService.prepareListFromMap( $scope.smsDataGroupedByPhone);
@@ -122,8 +138,14 @@ skeletonApp
 
         importSummary = new Summary();
 
-        var XML = "<SMSRequest><Username>03028501480</Username>" +
+       /* var XML = "<SMSRequest><Username>03028501480</Username>" +
             "<Password>cusit123</Password><Shortcode>7005056</Shortcode>" +
+            "<FromDate>"+moment($scope.startDate).format("YYYY-MM-DD HH:m:s")+"</FromDate>" +
+            "<ToDate>"+moment($scope.endDate).format("YYYY-MM-DD HH:m:s")+"</ToDate></SMSRequest>";*/
+
+
+        var XML = "<SMSRequest><Username>03028501375</Username>" +
+            "<Password>Pakistan123</Password><Shortcode>7005219</Shortcode>" +
             "<FromDate>"+moment($scope.startDate).format("YYYY-MM-DD HH:m:s")+"</FromDate>" +
             "<ToDate>"+moment($scope.endDate).format("YYYY-MM-DD HH:m:s")+"</ToDate></SMSRequest>";
 
@@ -156,6 +178,10 @@ skeletonApp
                             importSummary.addOnHoldResponse(phone,sms,state);
                             continue;
                         }
+                    if((sms.smsMessage == 'TR')||(sms.smsMessage == 'MTG')|| (sms.smsMessage == 'OL')&& (state.currentState == ACTION_IMPORT)){
+                        state.pairReady = true;
+
+                    }
                     if (state.pairReady){
                         importHandler(Object.assign({},state),sms,callback);
                         state.pairReady=false;
