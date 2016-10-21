@@ -18,6 +18,18 @@ function messageParser(state,msg,smsTo){
             return
         }
     }
+    // SSH
+    else if(firstWord[0] == 'I' && secondWord){
+
+        if (words.length==2){
+            // is provider code
+            state.changeState(ONHOLD);
+            state.providerData.value = secondWord;
+            state.providerData.timestamp = smsTo;
+            return
+        }
+    }
+
     else if(firstWord[0] == 'I'){
         if (words.length==1){
             // is provider code
@@ -34,23 +46,14 @@ function messageParser(state,msg,smsTo){
         if (words.length==2){
             // is provider code
             state.changeState(ONHOLD);
-            state.providerData.value = secondWord;
+            state.mawraData.value = secondWord;
             state.providerData.timestamp = smsTo;
+            state.mawraData.IPCCode =secondWord;
             return
         }
 
     }
-    // SSH
-    else if(firstWord[0] == 'I' && secondWord){
 
-        if (words.length==2){
-            // is provider code
-            state.changeState(ONHOLD);
-            state.providerData.value = secondWord;
-            state.providerData.timestamp = smsTo;
-            return
-        }
-    }
 
     switch(firstWord){
         case FOLLOW_UP_VISITS :
@@ -117,8 +120,12 @@ function messageParser(state,msg,smsTo){
         case BACK_CHECK :
 
                                       if(words.length == 3) {
-                                          actionImport()
-                                          break
+                                          state.mawraData.IPCCode =secondWord;
+                                          if(secondWord == state.mawraData.value){
+                                              actionImport()
+                                              break
+
+                                          }
                                       }
                                         invalidImport()
                                          break
@@ -160,6 +167,71 @@ function messageParser(state,msg,smsTo){
 
                                         invalidImport()
                                              break
+
+        case TRAINING_SUPERVISOR :
+
+                                      if (words.length==1){
+
+                                         actionImport()
+                                          break
+                    }
+
+                                        invalidImport()
+                                              break
+        case MEETING_SUPERVISOR  :
+
+                                     if (words.length==1){
+
+                                          actionImport()
+                                              break
+                                     }
+
+                                                invalidImport()
+                                                     break
+
+        case LEAVE_SUPERVISOR :
+
+                                      if (words.length==1){
+
+                                          actionImport()
+                                             break
+                                     }
+
+                                         invalidImport()
+                                             break
+
+        case TRAINING_AM :
+
+                                        if (words.length==1){
+
+                                             actionImport()
+                                                break
+                                      }
+
+                                            invalidImport()
+                                                break
+
+        case MEETING_AM :
+
+                                         if (words.length==1){
+
+                                             actionImport()
+                                                 break
+                                            }
+
+                                                 invalidImport()
+                                                    break
+
+        case LEAVE_AM :
+
+                                        if (words.length==1){
+
+                                           actionImport()
+                                                break
+                                        }
+
+                                            invalidImport()
+                                                break
 
         default :
                                         invalidImport()

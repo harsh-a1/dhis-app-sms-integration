@@ -165,45 +165,159 @@ skeletonApp
         var phone = smsList[0].smsFrom;
         phone = phone.substr(1,phone.length);// remove + sign from number
         importSummary.addRow(phone);
-        MetadataService.getTEIByAttribute(ROOT_OU_UID,PHONE_ATTR_UID,phone).then(function(tei){
-            if (tei.length>0){
-               state.tei = tei[0];
-                for (var i=0;i<smsList.length;i++){
-                    var sms = smsList[i];
+        var ProgramSupervisor = "kHRsNFOgLN2";
+        var ProgramAM = "ghe98M1z5s7";
+        var teiAMPhone,teiSupervisorPhone;
+        MetadataService.getTEIByAttribute(ROOT_OU_UID,PHONE_ATTR_UID,phone).then(function(tei) {
+            //../api/enrollments.json?ou=tZJsIdHAfKq&ouMode=DESCENDANTS&program=TbYUPaBChYR
 
-                    importSummary.addSMSDetails(phone,sms);
-                    messageParser(state,sms.smsMessage,new Date(sms.smsDate));
-                        if (state.currentState == ONHOLD){
-                            state.pairReady = true;
-                            importSummary.addOnHoldResponse(phone,sms,state);
-                            continue;
+            MetadataService.getTEIBYProgramSupervisor(ProgramSupervisor).then(function (tei1) {
+                MetadataService.getTEIBYProgramAM(ProgramAM).then(function (tei2) {
+
+                        //if (tei1.length > 0 && tei.length > 0) {
+                        //
+                        //    var supervisorProgramTei = [];
+                        //    var t = false;
+                        //    for (var i = 0; i < tei1.length; i++) {
+                        //        supervisorProgramTei.push(tei1[i].trackedEntityInstance);
+                        //    }
+                        //    if (supervisorProgramTei.includes(tei[0].trackedEntityInstance)) {
+                        //        t = true;
+                        //        //state.currentState = ACTION_IMPORT;
+                        //       // state.domain = DOMAIN_IPC;
+                        //        smsList.smsMessage = smsList.smsMessage+'SUPER';
+                        //        console.log(sms.smsMessage);
+                        //        /*for(var k=0; k<tei[0].attributes.length; k++){
+                        //         if(tei[0].attributes[k].displayName == 'Mobile number'){
+                        //         teiSupervisorPhone = tei[0].attributes[k].value;
+                        //         }
+                        //         }*/
+                        //    } else {
+                        //        t = false;
+                        //    }
+                        //
+                        //}
+                        //else {
+                        //    t = false;
+                        //}
+                        //if (tei2.length > 0 && tei.length > 0) {
+                        //    var a = false;
+                        //    var AMProgramTei = [];
+                        //    for (var i = 0; i < tei2.length; i++) {
+                        //
+                        //        AMProgramTei.push(tei2[i].trackedEntityInstance);
+                        //    }
+                        //
+                        //    if (supervisorProgramTei.includes(tei[0].trackedEntityInstance)) {
+                        //        a = true;
+                        //       // state.currentState = ACTION_IMPORT;
+                        //       // state.domain = DOMAIN_IPC;
+                        //
+                        //    }
+                        //    else {
+                        //        a = false;
+                        //    }
+                        //
+                        //
+                        //}
+                        //else {
+                        //
+                        //    a = false;
+                        //}
+                      //  console.log("t--" + t + teiSupervisorPhone);
+                      //  console.log("a--" + a + teiAMPhone);
+
+                    if (tei.length > 0) {
+                        state.tei = tei[0];
+                        state.ou= tei[0].orgUnit;
+                        for (var i = 0; i < smsList.length; i++) {
+                            var sms = smsList[i];
+
+                            importSummary.addSMSDetails(phone, sms);
+                            messageParser(state, sms.smsMessage, new Date(sms.smsDate));
+                            if (state.currentState == ONHOLD) {
+                                state.pairReady = true;
+                                importSummary.addOnHoldResponse(phone, sms, state);
+                                continue;
+                            }
+                            if ((sms.smsMessage == 'TR') || (sms.smsMessage == 'MTG') || (sms.smsMessage == 'OL') && (state.currentState == ACTION_IMPORT)) {
+                                state.pairReady = true;
+
+                                if (tei1.length > 0 && tei.length > 0) {
+
+                                    var supervisorProgramTei = [];
+                                    var t = false;
+                                    for (var i = 0; i < tei1.length; i++) {
+                                        supervisorProgramTei.push(tei1[i].trackedEntityInstance);
+                                    }
+                                    if (supervisorProgramTei.includes(tei[0].trackedEntityInstance)) {
+                                        t = true;
+                                        //state.currentState = ACTION_IMPORT;
+                                        // state.domain = DOMAIN_IPC;
+                                        state.firstWord = state.firstWord + 'SUPER';
+                                       // sms.smsMessage = sms.smsMessage+'SUPER';
+                                        console.log(state.firstWord);
+
+                                    } else {
+                                        t = false;
+                                    }
+
+                                }
+                                else {
+                                    t = false;
+                                }
+                                if (tei2.length > 0 && tei.length > 0) {
+                                    var a = false;
+                                    var AMProgramTei = [];
+                                    for (var i = 0; i < tei2.length; i++) {
+
+                                        AMProgramTei.push(tei2[i].trackedEntityInstance);
+                                    }
+
+                                    if (supervisorProgramTei.includes(tei[0].trackedEntityInstance)) {
+                                        a = true;
+                                        // state.currentState = ACTION_IMPORT;
+                                        // state.domain = DOMAIN_IPC;
+                                        state.firstWord = state.firstWord +'AM';
+                                        //sms.smsMessage = sms.smsMessage+'AM';
+                                        console.log(state.firstWord);
+
+                                    }
+                                    else {
+                                        a = false;
+                                    }
+
+
+                                }
+                                else {
+
+                                    a = false;
+                                }
+
+                            }
+                            if (state.pairReady) {
+                                importHandler(Object.assign({}, state), sms, callback);
+                                state.pairReady = false;
+                            } else {
+                                state.changeState(INVALID_PAIR);
+                                importHandler(Object.assign({}, state), sms, callback);
+                            }
                         }
-                    if((sms.smsMessage == 'TR')||(sms.smsMessage == 'MTG')|| (sms.smsMessage == 'OL')&& (state.currentState == ACTION_IMPORT)){
-                        state.pairReady = true;
+                    } else {
+                        state.changeState(INVALID_PHONE);
+                        for (var i = 0; i < smsList.length; i++) {
+                            var sms = smsList[i];
 
+                            importSummary.addSMSDetails(phone, sms);
+                            importHandler(Object.assign({}, state), sms, callback);
+                        }
                     }
-                    if (state.pairReady){
-                        importHandler(Object.assign({},state),sms,callback);
-                        state.pairReady=false;
-                    }else{
-                        state.changeState(INVALID_PAIR);
-                        importHandler(Object.assign({},state),sms,callback);
-                    }
-                }
-            }else{
-                state.changeState(INVALID_PHONE);
-                for (var i=0;i<smsList.length;i++){
-                    var sms = smsList[i];
-
-                    importSummary.addSMSDetails(phone,sms);
-                    importHandler(Object.assign({},state),sms,callback);
-                }
-            }
-            setTimeout(function(){
-                processData(smsData,index+1);
-            },10)
+                    setTimeout(function () {
+                        processData(smsData, index + 1);
+                    }, 10)
+                })
+            })
         })
-
         function callback(response){
             importSummary.addResponse(response);
             $timeout(function(){

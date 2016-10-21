@@ -32,7 +32,8 @@ function importHandler(state,sms,callback){
         var startDate = sms.smsDate.split(" ")[0];
         var DE_smsMessage = FFM_METADATA_MAP[state.currentState].DE_smsMessage;
         var DE_shortcode = FFM_METADATA_MAP[state.currentState].DE_shortcode;
-        var orgUnit = FFM_METADATA_MAP[state.currentState].orgUnit;
+        //var orgUnit = FFM_METADATA_MAP[state.currentState].orgUnit;
+        var orgUnit = state.ou;
 
         var event = new dhis2API.event();
             event.program = invalidProgramUID;
@@ -59,8 +60,10 @@ function importHandler(state,sms,callback){
         var DE_shortcode = FFM_METADATA_MAP[state.firstWord].DE_shortcode;
         var DE_previousMessageTimestamp = FFM_METADATA_MAP[state.firstWord].DE_previousMessageTimestamp;
         var DE_previousMessageField = FFM_METADATA_MAP[state.firstWord].DE_previousMessageField;
+        var DE_IPCCode = FFM_METADATA_MAP[state.firstWord].IPCCode;
 
-        var orgUnit = FFM_METADATA_MAP[state.firstWord].orgUnit;
+       // var orgUnit = FFM_METADATA_MAP[state.firstWord].orgUnit;
+        var orgUnit = state.ou;
 
         var event = new dhis2API.event();
             event.program = program;
@@ -84,6 +87,7 @@ function importHandler(state,sms,callback){
         //get prev message data
         var prev_timestamp ;
         var prev_value;
+        var ipcCode;
         var prev_data_holder = undefined;
 
         switch(state.firstWord){
@@ -102,14 +106,28 @@ function importHandler(state,sms,callback){
                                     break
 
         }
-        if(sms.smsMessage =='TR' ||sms.smsMessage =='MTG' || sms.smsMessage =='OL' ){
+        if(sms.smsMessage =='TR' ||sms.smsMessage =='MTG' || sms.smsMessage =='OL' ||sms.smsMessage =='TRSUPER' || sms.smsMessage == 'MTGSUPER' || sms.smsMessage =='OLSUPER'
+
+        || sms.smsMessage =='TRAM' ||sms.smsMessage =='MTGAM' ||sms.smsMessage =='OLAM'){
             prev_timestamp = "";
             prev_value = "";
+
+
+          //  event.dataValues.push({dataElement: DE_previousMessageTimestamp, value: prev_timestamp});
+           // event.dataValues.push({dataElement: DE_previousMessageField, value: prev_value});
+            event.dataValues.push({dataElement: DE_shortcode, value: sms.smsTo});
+
+        }
+        else if(sms.smsMessage.charAt(0) == 'B' && sms.smsMessage.charAt(3)== 'I'){ //BC msg
+
+            prev_timestamp = state[prev_data_holder].timestamp;
+            prev_value = state[prev_data_holder].value;
+            ipcCode = state[prev_data_holder].IPCCode;
 
             event.dataValues.push({dataElement: DE_previousMessageTimestamp, value: prev_timestamp});
             event.dataValues.push({dataElement: DE_previousMessageField, value: prev_value});
             event.dataValues.push({dataElement: DE_shortcode, value: sms.smsTo});
-
+            event.dataValues.push({dataElement: DE_IPCCode, value: ipcCode});
         }
         else {
 
@@ -140,8 +158,8 @@ function importHandler(state,sms,callback){
         var DE_shortcode = FFM_METADATA_MAP[state.currentState].DE_shortcode;
         var DE_smsMessage = FFM_METADATA_MAP[state.currentState].DE_smsMessage;
 
-        var orgUnit = FFM_METADATA_MAP[state.currentState].orgUnit;
-
+       // var orgUnit = FFM_METADATA_MAP[state.currentState].orgUnit;
+        var orgUnit = state.ou;
         var event = new dhis2API.event();
         event.program = program;
         event.programStage = programStage;

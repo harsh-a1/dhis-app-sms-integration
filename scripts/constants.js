@@ -34,9 +34,16 @@ const FOLLOW_UP_VISITS = "FV";
 const SUPERVISORY_SUPPORT_ORIENTATION_MEETING= "SSO";
 const SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING = "SSN";
 const SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT = "SSH";
-const TRAINING = "TR";
-const MEETING = "MTG";
-const LEAVE = "OL";
+const TRAINING = "TR"; //for IPC program
+const MEETING = "MTG"; //for IPC program
+const LEAVE = "OL"; //for IPC program
+const TRAINING_SUPERVISOR = "TRSUPER"; // for supervisor program
+const MEETING_SUPERVISOR = "MTGSUPER"; // for supervisor prog
+const LEAVE_SUPERVISOR = "OLSUPER"; // for supervisor prog
+const TRAINING_AM = "TRAM"; // for AM program
+const MEETING_AM = "MTGAM";// for AM program
+const LEAVE_AM = "OLAM";// for AM program
+
 
 
 // Operational mappings
@@ -65,6 +72,12 @@ const PRST_SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT = "qAnwuzymSvu";
 const PRST_TRAINING_IPC = "MxHjgrTCsnB";
 const PRST_MEETING_IPC ="bLZzC5x8IBn";
 const PRST_LEAVE_IPC ="n0RPVGCbi7D";
+const PRST_TRAINING_SUPERVISOR ="luZIG1Br7dP";
+const PRST_MEETING_SUPERVISOR ="zdLmctzOaGI";
+const PRST_LEAVE_SUPERVISOR ="Oe6ck6a30DA";
+const PRST_TRAINING_AM ="UAO8Ed8kp5r";
+const PRST_MEETING_AM ="wUqieTuXJHC";
+const PRST_LEAVE_AM ="HZEsL4JTJZk";
 
 /* Common */
 const ProviderCode = "sBD5FEalBsU";
@@ -203,7 +216,7 @@ const FFM_METADATA_MAP = {
 
     SSO:{
         pattern : { 1 :  "DE_numOfParticipants" },
-        program : PR_FFM_IPC,
+        program : PR_FFM_SUPERVISOR,
         programStage : PRST_ORIENTATION_MEETING_WITH_PROVIDER,
         orgUnit : ROOT_OU_UID,
         DE_previousMessageField : IPCCode,
@@ -217,7 +230,7 @@ const FFM_METADATA_MAP = {
         pattern : { 1 :  "DE_numOfMawra" ,
         2 : "DE_numOfMen",
         3 : "DE_numOfMotherInLaw" },
-        program : PR_FFM_IPC,
+        program : PR_FFM_SUPERVISOR,
         programStage : PRST_SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING,
         orgUnit : ROOT_OU_UID,
         DE_previousMessageField : IPCCode,
@@ -231,14 +244,16 @@ const FFM_METADATA_MAP = {
     },
 
     BC: {
-        pattern : { 1 : "DE_numOfBackChecks"
+        pattern : { 1 : "DE_previousMessageField",
+            2 : "DE_numOfBackChecks"
         },
-        program : PR_FFM_IPC ,
+        program : PR_FFM_SUPERVISOR ,
         programStage: PRST_BACK_CHECKS,
         orgUnit : ROOT_OU_UID,
+        DE_previousMessageField : IPCCode,
+        DE_IPCCode : IPCCode,
         DE_numOfBackChecks : BC_NumOfBackChecks,
         DE_shortcode : Shortcode,
-        DE_previousMessageField : FirstMawraID,
         DE_previousMessageTimestamp : PreviousMessageTimestamp
 
     },
@@ -248,14 +263,14 @@ const FFM_METADATA_MAP = {
             2 : "DE_clientsRegistered"
 
         },
-        program : PR_FFM_IPC,
+        program : PR_FFM_SUPERVISOR,
         programStage : PRST_SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT,
         orgUnit : ROOT_OU_UID,
         DE_previousMessageField : FirstMawraID,
+        DE_lastMawraId : LastMawraId,
+        DE_clientsRegistered :SSH_clientsRegistered,
         DE_shortcode : Shortcode,
         DE_previousMessageTimestamp : PreviousMessageTimestamp,
-        DE_lastMawraId : LastMawraId,
-        DE_clientsRegistered :SSH_clientsRegistered
     },
 
     TR: {
@@ -279,6 +294,60 @@ const FFM_METADATA_MAP = {
     OL: {
         program : PR_FFM_IPC ,
         programStage: PRST_LEAVE_IPC,
+        orgUnit : ROOT_OU_UID,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
+    },
+
+    TRSUPER: {
+        program : PR_FFM_SUPERVISOR ,
+        programStage: PRST_TRAINING_SUPERVISOR,
+        orgUnit : ROOT_OU_UID,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
+    },
+
+    MTGSUPER: {
+        program : PR_FFM_SUPERVISOR ,
+        programStage: PRST_MEETING_SUPERVISOR,
+        orgUnit : ROOT_OU_UID,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
+    },
+
+    OLSUPER: {
+        program : PR_FFM_SUPERVISOR ,
+        programStage: PRST_LEAVE_SUPERVISOR,
+        orgUnit : ROOT_OU_UID,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
+    },
+
+    TRAM: {
+        program : PR_FFM_AM ,
+        programStage: PRST_TRAINING_AM,
+        orgUnit : ROOT_OU_UID,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
+    },
+
+    MTGAM: {
+        program : PR_FFM_AM ,
+        programStage: PRST_MEETING_AM,
+        orgUnit : ROOT_OU_UID,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
+    },
+
+    OLAM: {
+        program : PR_FFM_AM ,
+        programStage: PRST_LEAVE_AM,
         orgUnit : ROOT_OU_UID,
         DE_shortcode : Shortcode,
         DE_previousMessageTimestamp : PreviousMessageTimestamp

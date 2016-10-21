@@ -51,6 +51,35 @@ var skeletonAppServices = angular.module('skeletonAppServices', [])
                });
                return def;
            },
+
+           getTEIBYProgramSupervisor :function(ProgramSupervisor){
+               var def = $.Deferred();
+               $.ajax({
+                   type: "GET",
+                   dataType: "json",
+                   contentType: "application/json",
+                   url: '../../enrollments.json?ou=tZJsIdHAfKq&ouMode=DESCENDANTS&program='+ProgramSupervisor,
+                   success: function (data) {
+                       def.resolve(data.enrollments);
+                   }
+               });
+               return def;
+           },
+
+           getTEIBYProgramAM :function(ProgramAM){
+               var def = $.Deferred();
+               $.ajax({
+                   type: "GET",
+                   dataType: "json",
+                   contentType: "application/json",
+                   url: '../../enrollments.json?ou=tZJsIdHAfKq&ouMode=DESCENDANTS&program='+ProgramAM,
+                   success: function (data) {
+                       def.resolve(data.enrollments);
+                   }
+               });
+               return def;
+           },
+
            getCurrentUser : function(){
                var def = $.Deferred();
                $.ajax({

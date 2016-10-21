@@ -11,6 +11,7 @@ StateMachine = function(){
     this.mawraData = {};
     this.domain = "";
     this.pairReady=false
+    this.ou = "";
 
 }
 
