@@ -60,7 +60,10 @@ function importHandler(state,sms,callback){
         var DE_shortcode = FFM_METADATA_MAP[state.firstWord].DE_shortcode;
         var DE_previousMessageTimestamp = FFM_METADATA_MAP[state.firstWord].DE_previousMessageTimestamp;
         var DE_previousMessageField = FFM_METADATA_MAP[state.firstWord].DE_previousMessageField;
-        var DE_IPCCode = FFM_METADATA_MAP[state.firstWord].IPCCode;
+        var DE_IPCCode = FFM_METADATA_MAP[state.firstWord].DE_IPCCode;
+        var DE_LastMawra = FFM_METADATA_MAP[state.firstWord].DE_lastMawraId;
+        var DE_FirstMawra = FFM_METADATA_MAP[state.firstWord].DE_firstMawraId;
+        var DE_SSH_clientsRegistered = FFM_METADATA_MAP[state.firstWord].DE_clientsRegistered;
 
        // var orgUnit = FFM_METADATA_MAP[state.firstWord].orgUnit;
         var orgUnit = state.ou;
@@ -86,8 +89,8 @@ function importHandler(state,sms,callback){
 
         //get prev message data
         var prev_timestamp ;
-        var prev_value;
-        var ipcCode;
+        var prev_value,shortCode;
+        var ipcCode, clientsReg, lastMawraId;
         var prev_data_holder = undefined;
 
         switch(state.firstWord){
@@ -102,6 +105,10 @@ function importHandler(state,sms,callback){
             case AREA_MAPPING :
             case SUPERVISORY_SUPPORT_ORIENTATION_MEETING :
             case SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING :
+            case SUPERVISORY_SUPPORT_ORIENTATION_MEETING_AM :
+            case SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING_AM :
+            case SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT_AM :
+            case BACK_CHECK_AM :
                                     prev_data_holder = "providerData";
                                     break
 
@@ -125,9 +132,55 @@ function importHandler(state,sms,callback){
             ipcCode = state[prev_data_holder].IPCCode;
 
             event.dataValues.push({dataElement: DE_previousMessageTimestamp, value: prev_timestamp});
+         //   event.dataValues.push({dataElement: DE_previousMessageField, value: prev_value});
+            event.dataValues.push({dataElement: DE_IPCCode, value: prev_value});
+            event.dataValues.push({dataElement: DE_shortcode, value: sms.smsTo});
+           // event.dataValues.push({dataElement: DE_IPCCode, value: ipcCode});
+        }
+
+
+       else if(sms.smsMessage.charAt(0) == 'S' && sms.smsMessage.charAt(1)== 'S' && sms.smsMessage.charAt(2)== 'O' && (state.currentState == ACTION_IMPORT)){
+
+            prev_timestamp = state[prev_data_holder].timestamp;
+            prev_value = state[prev_data_holder].value;
+
+
+            event.dataValues.push({dataElement: DE_previousMessageTimestamp, value: prev_timestamp});
             event.dataValues.push({dataElement: DE_previousMessageField, value: prev_value});
             event.dataValues.push({dataElement: DE_shortcode, value: sms.smsTo});
+        }
+        else if(sms.smsMessage.charAt(0) == 'S' && sms.smsMessage.charAt(1)== 'S' && sms.smsMessage.charAt(2)== 'H' && (state.currentState == ACTION_IMPORT)){
+
+            prev_timestamp = state[prev_data_holder].timestamp;
+            prev_value = state[prev_data_holder].value;
+            ipcCode = state[prev_data_holder].IPCCode;
+           // clientsReg = state[prev_data_holder].thirdWord;
+           // lastMawraId = state[prev_data_holder].lastMawra;
+
+            event.dataValues.push({dataElement: DE_previousMessageTimestamp, value: prev_timestamp});
+            event.dataValues.push({dataElement: DE_FirstMawra, value: prev_value});
+            event.dataValues.push({dataElement: DE_shortcode, value: sms.smsTo});
+            //event.dataValues.push({dataElement: DE_SSH_clientsRegistered, value: clientsReg});
             event.dataValues.push({dataElement: DE_IPCCode, value: ipcCode});
+            //event.dataValues.push({dataElement: DE_LastMawra, value: lastMawraId});
+        }
+        else if(sms.smsMessage.charAt(0) == 'S' && sms.smsMessage.charAt(1)== 'S' && sms.smsMessage.charAt(2)== 'N' && (state.currentState == ACTION_IMPORT)){
+
+            prev_timestamp = state[prev_data_holder].timestamp;
+            prev_value = state[prev_data_holder].value;
+
+            event.dataValues.push({dataElement: DE_previousMessageTimestamp, value: prev_timestamp});
+            event.dataValues.push({dataElement: DE_previousMessageField, value: prev_value});
+            event.dataValues.push({dataElement: DE_shortcode, value: sms.smsTo});
+        }
+        else if(sms.smsMessage.charAt(0) == 'B' && sms.smsMessage.charAt(1)== 'C' && (state.currentState == ACTION_IMPORT)){
+
+            prev_timestamp = state[prev_data_holder].timestamp;
+            prev_value = state[prev_data_holder].value;
+
+            event.dataValues.push({dataElement: DE_previousMessageTimestamp, value: prev_timestamp});
+            event.dataValues.push({dataElement: DE_previousMessageField, value: prev_value});
+            event.dataValues.push({dataElement: DE_shortcode, value: sms.smsTo});
         }
         else {
 

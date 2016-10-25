@@ -174,59 +174,6 @@ skeletonApp
             MetadataService.getTEIBYProgramSupervisor(ProgramSupervisor).then(function (tei1) {
                 MetadataService.getTEIBYProgramAM(ProgramAM).then(function (tei2) {
 
-                        //if (tei1.length > 0 && tei.length > 0) {
-                        //
-                        //    var supervisorProgramTei = [];
-                        //    var t = false;
-                        //    for (var i = 0; i < tei1.length; i++) {
-                        //        supervisorProgramTei.push(tei1[i].trackedEntityInstance);
-                        //    }
-                        //    if (supervisorProgramTei.includes(tei[0].trackedEntityInstance)) {
-                        //        t = true;
-                        //        //state.currentState = ACTION_IMPORT;
-                        //       // state.domain = DOMAIN_IPC;
-                        //        smsList.smsMessage = smsList.smsMessage+'SUPER';
-                        //        console.log(sms.smsMessage);
-                        //        /*for(var k=0; k<tei[0].attributes.length; k++){
-                        //         if(tei[0].attributes[k].displayName == 'Mobile number'){
-                        //         teiSupervisorPhone = tei[0].attributes[k].value;
-                        //         }
-                        //         }*/
-                        //    } else {
-                        //        t = false;
-                        //    }
-                        //
-                        //}
-                        //else {
-                        //    t = false;
-                        //}
-                        //if (tei2.length > 0 && tei.length > 0) {
-                        //    var a = false;
-                        //    var AMProgramTei = [];
-                        //    for (var i = 0; i < tei2.length; i++) {
-                        //
-                        //        AMProgramTei.push(tei2[i].trackedEntityInstance);
-                        //    }
-                        //
-                        //    if (supervisorProgramTei.includes(tei[0].trackedEntityInstance)) {
-                        //        a = true;
-                        //       // state.currentState = ACTION_IMPORT;
-                        //       // state.domain = DOMAIN_IPC;
-                        //
-                        //    }
-                        //    else {
-                        //        a = false;
-                        //    }
-                        //
-                        //
-                        //}
-                        //else {
-                        //
-                        //    a = false;
-                        //}
-                      //  console.log("t--" + t + teiSupervisorPhone);
-                      //  console.log("a--" + a + teiAMPhone);
-
                     if (tei.length > 0) {
                         state.tei = tei[0];
                         state.ou= tei[0].orgUnit;
@@ -247,8 +194,8 @@ skeletonApp
 
                                     var supervisorProgramTei = [];
                                     var t = false;
-                                    for (var i = 0; i < tei1.length; i++) {
-                                        supervisorProgramTei.push(tei1[i].trackedEntityInstance);
+                                    for (var j = 0; j < tei1.length; j++) {
+                                        supervisorProgramTei.push(tei1[j].trackedEntityInstance);
                                     }
                                     if (supervisorProgramTei.includes(tei[0].trackedEntityInstance)) {
                                         t = true;
@@ -269,17 +216,14 @@ skeletonApp
                                 if (tei2.length > 0 && tei.length > 0) {
                                     var a = false;
                                     var AMProgramTei = [];
-                                    for (var i = 0; i < tei2.length; i++) {
+                                    for (var k = 0; k < tei2.length; k++) {
 
-                                        AMProgramTei.push(tei2[i].trackedEntityInstance);
+                                        AMProgramTei.push(tei2[k].trackedEntityInstance);
                                     }
 
-                                    if (supervisorProgramTei.includes(tei[0].trackedEntityInstance)) {
+                                    if (AMProgramTei.includes(tei[0].trackedEntityInstance)) {
                                         a = true;
-                                        // state.currentState = ACTION_IMPORT;
-                                        // state.domain = DOMAIN_IPC;
                                         state.firstWord = state.firstWord +'AM';
-                                        //sms.smsMessage = sms.smsMessage+'AM';
                                         console.log(state.firstWord);
 
                                     }
@@ -295,6 +239,50 @@ skeletonApp
                                 }
 
                             }
+
+
+                                if (tei2.length > 0 && tei.length > 0) {
+                                    var s = false;
+                                    var SSOAMTei = [];
+                                    for (var l = 0; l < tei2.length; l++) {
+
+                                        SSOAMTei.push(tei2[l].trackedEntityInstance);
+                                    }
+
+                                  if (SSOAMTei.includes(tei[0].trackedEntityInstance)) {
+                                        s = true;
+                                        state.pairReady = true;
+                                        if(sms.smsMessage.charAt(0) == 'S' && sms.smsMessage.charAt(1)== 'S' && sms.smsMessage.charAt(2)== 'O' && (state.currentState == ACTION_IMPORT)){
+                                            state.firstWord = state.firstWord +'AM';
+                                           /* state.providerData.value = secondWord;
+                                            state.providerData.timestamp = sms.smsDate;
+                                            state.providerData.shortCode =sms.smsTo;*/
+
+                                        }
+                                        else if(sms.smsMessage.charAt(0) == 'S' && sms.smsMessage.charAt(1)== 'S' && sms.smsMessage.charAt(2)== 'N' && (state.currentState == ACTION_IMPORT)){
+                                            state.firstWord = state.firstWord +'AM';
+
+                                        }
+                                        else if(sms.smsMessage.charAt(0) == 'S' && sms.smsMessage.charAt(1)== 'S' && sms.smsMessage.charAt(2)== 'H' && (state.currentState == ACTION_IMPORT)){
+                                            state.firstWord = state.firstWord +'AM';
+
+                                        }
+                                        else if(sms.smsMessage.charAt(0) == 'B' && sms.smsMessage.charAt(1)== 'C' && (state.currentState == ACTION_IMPORT)){
+                                            state.firstWord = state.firstWord +'AM';
+
+                                        }
+
+                                    }
+                                    else {
+                                        s = false;
+                                    }
+
+                                }
+                                else {
+                                    s = false;
+                                }
+
+
                             if (state.pairReady) {
                                 importHandler(Object.assign({}, state), sms, callback);
                                 state.pairReady = false;

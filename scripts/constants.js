@@ -43,7 +43,10 @@ const LEAVE_SUPERVISOR = "OLSUPER"; // for supervisor prog
 const TRAINING_AM = "TRAM"; // for AM program
 const MEETING_AM = "MTGAM";// for AM program
 const LEAVE_AM = "OLAM";// for AM program
-
+const SUPERVISORY_SUPPORT_ORIENTATION_MEETING_AM= "SSOAM";
+const SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING_AM = "SSNAM";
+const SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT_AM = "SSHAM";
+const BACK_CHECK_AM = "BCAM";
 
 
 // Operational mappings
@@ -68,7 +71,9 @@ const PRST_INVALID = "pmj1wbykdGj";
 const PRST_ORIENTATION_MEETING_WITH_PROVIDER = "cl1PtRoB3uu";
 const PRST_SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING  = "gYaaS7ZgLQ3";
 const PRST_BACK_CHECKS = "XvHb30rWm8b";
-const PRST_SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT = "qAnwuzymSvu";
+
+//*********LOCAL
+const PRST_SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT = "qAnwuzymSvu"
 const PRST_TRAINING_IPC = "MxHjgrTCsnB";
 const PRST_MEETING_IPC ="bLZzC5x8IBn";
 const PRST_LEAVE_IPC ="n0RPVGCbi7D";
@@ -78,6 +83,28 @@ const PRST_LEAVE_SUPERVISOR ="Oe6ck6a30DA";
 const PRST_TRAINING_AM ="UAO8Ed8kp5r";
 const PRST_MEETING_AM ="wUqieTuXJHC";
 const PRST_LEAVE_AM ="HZEsL4JTJZk";
+//const PRST_AMSSO = "" ;
+//const PRST_AMSSN ="" ;
+//const PRST_AMBC ="";
+//const PRST_AMSSH ="";
+
+//******** PRODUCTION ********
+//const PRST_SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT = "t9675iibhaS";
+//const PRST_TRAINING_IPC = "uS6sYrzArbq";
+//const PRST_MEETING_IPC ="w1VGoOvtwjj";
+//const PRST_LEAVE_IPC ="LGPVFx5Bhdb";
+//const PRST_TRAINING_SUPERVISOR ="W4Twr2auGbY";
+//const PRST_MEETING_SUPERVISOR ="xakjK2OCwiu";
+//const PRST_LEAVE_SUPERVISOR ="kIjiRbLNxzA";
+//const PRST_TRAINING_AM ="t2CH8rANCDz";
+//const PRST_MEETING_AM ="oxOn8bqPFxG";
+//const PRST_LEAVE_AM ="zLxzHw5I94a";
+const PRST_AMSSO = "Cico3WLrAHo" ;
+const PRST_AMSSN ="oWRB351KsXi" ;
+const PRST_AMBC ="H5EehlRwFXX";
+const PRST_AMSSH ="qAnwuzymSvu";
+
+
 
 /* Common */
 const ProviderCode = "sBD5FEalBsU";
@@ -226,6 +253,17 @@ const FFM_METADATA_MAP = {
 
     },
 
+    SSOAM:{
+        pattern : { },
+        program : PR_FFM_AM,
+        orgUnit : ROOT_OU_UID,
+        programStage : PRST_AMSSO,
+        DE_previousMessageField : ProviderCode,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
+    },
+
     SSN: {
         pattern : { 1 :  "DE_numOfMawra" ,
         2 : "DE_numOfMen",
@@ -240,6 +278,17 @@ const FFM_METADATA_MAP = {
         DE_shortcode : Shortcode,
         DE_previousMessageTimestamp : PreviousMessageTimestamp
 
+
+    },
+
+    SSNAM:{
+        pattern : { },
+        program : PR_FFM_AM,
+        orgUnit : ROOT_OU_UID,
+        programStage : PRST_AMSSN,
+        DE_previousMessageField : ProviderCode,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
 
     },
 
@@ -258,8 +307,20 @@ const FFM_METADATA_MAP = {
 
     },
 
+    BCAM:{
+        pattern : { },
+        program : PR_FFM_AM,
+        orgUnit : ROOT_OU_UID,
+        programStage : PRST_AMBC,
+        DE_previousMessageField : ProviderCode,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
+    },
+
     SSH: {
-        pattern : { 1 : "DE_lastMawraId",
+        pattern : { //1:"DE_firstMawraId",
+            1 : "DE_lastMawraId",
             2 : "DE_clientsRegistered"
 
         },
@@ -267,10 +328,23 @@ const FFM_METADATA_MAP = {
         programStage : PRST_SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT,
         orgUnit : ROOT_OU_UID,
         DE_previousMessageField : FirstMawraID,
+        DE_firstMawraId :FirstMawraID,
         DE_lastMawraId : LastMawraId,
         DE_clientsRegistered :SSH_clientsRegistered,
+        DE_IPCCode : IPCCode,
         DE_shortcode : Shortcode,
-        DE_previousMessageTimestamp : PreviousMessageTimestamp,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+    },
+
+    SSHAM:{
+        pattern : { },
+        program : PR_FFM_AM,
+        orgUnit : ROOT_OU_UID,
+        programStage : PRST_AMSSH,
+        DE_previousMessageField : ProviderCode,
+        DE_shortcode : Shortcode,
+        DE_previousMessageTimestamp : PreviousMessageTimestamp
+
     },
 
     TR: {

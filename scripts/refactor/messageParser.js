@@ -8,6 +8,7 @@ function messageParser(state,msg,smsTo){
 
     var firstWord = words[0];
     var secondWord = words[1];
+    var thirdWord = words[2];
 
     if (firstWord[0] == 'Z'){
         if (words.length==1){
@@ -24,8 +25,8 @@ function messageParser(state,msg,smsTo){
         if (words.length==2){
             // is provider code
             state.changeState(ONHOLD);
-            state.providerData.value = secondWord;
-            state.providerData.timestamp = smsTo;
+            state.mawraData.value = secondWord;
+            state.mawraData.timestamp = smsTo;
             return
         }
     }
@@ -133,6 +134,10 @@ function messageParser(state,msg,smsTo){
         case SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT :
 
                                         if(words.length ==3){
+                                            state.mawraData.timestamp = smsTo;
+                                            state.mawraData.thirdWord = thirdWord;
+                                            state.mawraData.lastMawra = secondWord;
+
                                             actionImport()
                                             break
                                         }
@@ -232,6 +237,43 @@ function messageParser(state,msg,smsTo){
 
                                             invalidImport()
                                                 break
+
+        case SUPERVISORY_SUPPORT_ORIENTATION_MEETING_AM :
+
+                                                 if (words.length !=1){
+                                                      invalidImport()
+                                                             break
+                                                 }
+
+                                                         actionImport()
+                                                             break
+
+        case SUPERVISORY_SUPPORT_NEIGBOURHOOD_MEETING_AM :
+
+                                                     if (words.length !=1){
+                                                         invalidImport()
+                                                                 break
+                                                         }
+                                                             actionImport()
+                                                                  break
+
+        case SUPERVISORY_SUPPORT_HOUSEHOLD_VISIT_AM :
+
+                                                     if (words.length !=1){
+                                                         invalidImport()
+                                                              break
+                                         }
+                                                     actionImport()
+                                                         break
+
+        case BACK_CHECK_AM :
+
+                                                     if (words.length !=1){
+                                                        invalidImport()
+                                                            break
+                                                    }
+                                                        actionImport()
+                                                            break
 
         default :
                                         invalidImport()
